@@ -1,0 +1,3 @@
+# Wardrobe
+
+Wardrobe plugin.

@@ -1,0 +1,31 @@
+main: com.cavetale.wardrobe.WardrobePlugin
+
+name: Wardrobe
+version: 0.1
+description: Wardrobe Plugin
+api-version: 1.13
+
+author: StarTux
+website: https://github.com/StarTux/Wardrobe
+
+depend: [Mytems, SQL, PlayerCache]
+softdepend: []
+
+commands:
+
+  wardrobe:
+    aliases: []
+    description: Wardrobe Command
+    permission: wardrobe.wardrobe
+    usage: |-
+      /wardrobe
+
+permissions:
+
+  wardrobe.wardrobe:
+    description: Use /wardrobe
+    default: op
+
+  wardrobe.admin:
+    description: Wardrobe admin
+    default: op
