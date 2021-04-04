@@ -47,7 +47,7 @@ public enum Costume {
         if (backup != null) {
             player.setPlayerProfile(backup);
         }
-        return worn.get(player.getUniqueId());
+        return worn.remove(player.getUniqueId());
     }
 
     public PlayerProfile toPlayerProfile() {

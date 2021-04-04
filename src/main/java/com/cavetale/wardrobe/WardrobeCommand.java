@@ -106,7 +106,7 @@ public final class WardrobeCommand implements TabExecutor {
             if (unlocked.contains(costume)) {
                 gui.setItem(slot, costume.toPlayerHead(), click -> {
                         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
-                        if (costume == costume.remove(player)) {
+                        if (costume == Costume.remove(player)) {
                             player.sendMessage(Component.text("Costume removed!").color(TextColor.color(COLOR)));
                             return;
                         }
