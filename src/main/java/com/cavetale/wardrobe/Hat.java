@@ -44,7 +44,7 @@ public enum Hat {
             }
         }
         // Helmet slot is empty now!
-        itemStack = mytems.getMytem().getItem();
+        itemStack = mytems.getMytem().createItemStack(player);
         player.getInventory().setHelmet(itemStack);
         return true;
     }
@@ -86,7 +86,7 @@ public enum Hat {
     }
 
     public ItemStack toItemStack() {
-        ItemStack itemStack = mytems.getMytem().getItem();
+        ItemStack itemStack = mytems.getMytem().createItemStack();
         ItemMeta meta = itemStack.getItemMeta();
         meta.displayName(displayName);
         meta.lore(Arrays.asList(Component.text("Click to equip").color(TextColor.color(0xFFFF00)).decoration(TextDecoration.ITALIC, false)));
