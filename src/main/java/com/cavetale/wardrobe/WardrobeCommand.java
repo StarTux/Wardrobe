@@ -73,6 +73,7 @@ public final class WardrobeCommand implements TabExecutor {
             if (pack == null) continue;
             if (pack.hat != null) unlocked.add(pack.hat);
             if (pack.costume != null) unlocked.add(pack.costume);
+            if (pack.handheld != null) unlocked.add(pack.handheld);
         }
         Gui gui = new Gui(plugin).title(Component.text("Wardrobe").color(TextColor.color(COLOR)).decorate(TextDecoration.BOLD));
         gui.size(9);
@@ -116,6 +117,31 @@ public final class WardrobeCommand implements TabExecutor {
                     });
             } else {
                 gui.setItem(slot, unowned(costume.toPlayerHead()));
+            }
+        }
+        for (Handheld handheld : Handheld.values()) {
+            int slot = itemIndex++;
+            if (unlocked.contains(handheld)) {
+                gui.setItem(slot, handheld.toItemStack(), click -> {
+                        boolean offHand = click.isRightClick();
+                        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
+                        Handheld removed = handheld.remove(player, offHand);
+                        if (removed == handheld) {
+                            player.sendMessage(Component.text("Handheld removed: ").color(TextColor.color(COLOR))
+                                               .append(removed.displayName));
+                            return;
+                        }
+                        if (handheld.hold(player, offHand)) {
+                            player.sendMessage(Component.text("Handheld equipped: ").color(TextColor.color(COLOR))
+                                               .append(handheld.displayName));
+                        } else {
+                            player.sendMessage(Component.text("Cannot equip ").color(TextColor.color(0xFF0000))
+                                               .append(handheld.displayName)
+                                               .append(Component.text(": Inventory is full!").color(TextColor.color(0xFF0000))));
+                        }
+                    });
+            } else {
+                gui.setItem(slot, unowned(handheld.toItemStack()));
             }
         }
         gui.open(player);

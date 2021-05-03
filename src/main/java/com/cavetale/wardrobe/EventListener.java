@@ -37,8 +37,17 @@ public final class EventListener implements Listener {
         if (hat != null) {
             event.setCancelled(true);
             event.setCurrentItem(null);
-            player.sendMessage(Component.text("Hat removed: ").color(TextColor.color(COLOR))
+            player.sendMessage(Component.text("Wardrobe item removed: ").color(TextColor.color(COLOR))
                                .append(hat.displayName));
+            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
+            return;
+        }
+        Handheld handheld = Handheld.of(itemStack);
+        if (handheld != null) {
+            event.setCancelled(true);
+            event.setCurrentItem(null);
+            player.sendMessage(Component.text("Wardrobe item removed: ").color(TextColor.color(COLOR))
+                               .append(handheld.displayName));
             player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
             return;
         }
@@ -57,8 +66,17 @@ public final class EventListener implements Listener {
             if (hat != null) {
                 event.setCancelled(true);
                 event.getView().setItem(rawSlot, null);
-                player.sendMessage(Component.text("Hat removed: ").color(TextColor.color(COLOR))
+                player.sendMessage(Component.text("Wardrobe item removed: ").color(TextColor.color(COLOR))
                                    .append(hat.displayName));
+                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
+                continue;
+            }
+            Handheld handheld = Handheld.of(itemStack);
+            if (handheld != null) {
+                event.setCancelled(true);
+                event.getView().setItem(rawSlot, null);
+                player.sendMessage(Component.text("Wardrobe item removed: ").color(TextColor.color(COLOR))
+                                   .append(handheld.displayName));
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
                 continue;
             }

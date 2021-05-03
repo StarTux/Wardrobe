@@ -11,8 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public enum Hat {
-    WHITE_BUNNY_EARS(Component.text("White Bunny Ears").color(TextColor.color(0xFFFFFF)).decoration(TextDecoration.ITALIC, false),
-                     Mytems.WHITE_BUNNY_EARS);
+    WHITE_BUNNY_EARS(Component.text("White Bunny Ears", TextColor.color(0xFFFFFF)), Mytems.WHITE_BUNNY_EARS);
 
     public final Component displayName;
     public final Mytems mytems;
@@ -88,7 +87,7 @@ public enum Hat {
     public ItemStack toItemStack() {
         ItemStack itemStack = mytems.getMytem().createItemStack();
         ItemMeta meta = itemStack.getItemMeta();
-        meta.displayName(displayName);
+        meta.displayName(displayName.decoration(TextDecoration.ITALIC, false));
         meta.lore(Arrays.asList(Component.text("Click to equip").color(TextColor.color(0xFFFF00)).decoration(TextDecoration.ITALIC, false)));
         meta.addItemFlags(ItemFlag.values());
         itemStack.setItemMeta(meta);
