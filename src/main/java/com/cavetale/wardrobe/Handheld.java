@@ -5,6 +5,7 @@ import java.util.Arrays;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -47,6 +48,17 @@ public enum Handheld {
      * @return the Handheld that was removed or false
      */
     public static Handheld remove(Player player, boolean offHand) {
+        // Silently remove all non-held slots
+        int heldItemSlot = player.getInventory().getHeldItemSlot();
+        for (int i = 0; i < 9; i += 1) {
+            if (i == heldItemSlot) continue;
+            ItemStack itemStack = player.getInventory().getItem(i);
+            Handheld handheld = of(itemStack);
+            if (handheld != null) {
+                player.getInventory().setItem(i, null);
+            }
+        }
+        // Now do the actual hand
         Handheld handheld = of(player, offHand);
         if (handheld == null) return null;
         if (offHand) {
@@ -65,7 +77,7 @@ public enum Handheld {
         ItemStack itemStack = offHand
             ? player.getInventory().getItemInOffHand()
             : player.getInventory().getItemInMainHand();
-        if (itemStack == null || itemStack.getAmount() == 0) return null;
+        if (itemStack == null || itemStack.getType() == Material.AIR) return null;
         Mytems mytems = Mytems.forItem(itemStack);
         if (mytems == null) return null;
         for (Handheld handheld : Handheld.values()) {
@@ -75,7 +87,7 @@ public enum Handheld {
     }
 
     public static Handheld of(ItemStack itemStack) {
-        if (itemStack == null || itemStack.getAmount() == 0) return null;
+        if (itemStack == null || itemStack.getType() == Material.AIR) return null;
         Mytems mytems = Mytems.forItem(itemStack);
         if (mytems == null) return null;
         for (Handheld handheld : Handheld.values()) {

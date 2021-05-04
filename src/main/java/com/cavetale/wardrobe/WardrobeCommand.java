@@ -137,7 +137,7 @@ public final class WardrobeCommand implements TabExecutor {
                         } else {
                             player.sendMessage(Component.text("Cannot equip ").color(TextColor.color(0xFF0000))
                                                .append(handheld.displayName)
-                                               .append(Component.text(": Inventory is full!").color(TextColor.color(0xFF0000))));
+                                               .append(Component.text(": Hand is full!").color(TextColor.color(0xFF0000))));
                         }
                     });
             } else {

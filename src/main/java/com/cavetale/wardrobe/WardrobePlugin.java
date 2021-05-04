@@ -39,5 +39,7 @@ public final class WardrobePlugin extends JavaPlugin {
     void removeAll(Player player) {
         Costume.remove(player);
         Hat.remove(player);
+        Handheld.remove(player, false);
+        Handheld.remove(player, true);
     }
 }
