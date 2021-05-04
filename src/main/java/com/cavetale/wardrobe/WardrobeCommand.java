@@ -19,6 +19,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -82,6 +83,7 @@ public final class WardrobeCommand implements TabExecutor {
             int slot = itemIndex++;
             if (unlocked.contains(hat)) {
                 gui.setItem(slot, hat.toItemStack(), click -> {
+                        if (click.getClick() != ClickType.LEFT) return;
                         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
                         Hat removed = hat.remove(player);
                         if (removed == hat) {
@@ -106,6 +108,7 @@ public final class WardrobeCommand implements TabExecutor {
             int slot = itemIndex++;
             if (unlocked.contains(costume)) {
                 gui.setItem(slot, costume.toPlayerHead(), click -> {
+                        if (click.getClick() != ClickType.LEFT) return;
                         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
                         if (costume == Costume.remove(player)) {
                             player.sendMessage(Component.text("Costume removed!").color(TextColor.color(COLOR)));
@@ -123,6 +126,7 @@ public final class WardrobeCommand implements TabExecutor {
             int slot = itemIndex++;
             if (unlocked.contains(handheld)) {
                 gui.setItem(slot, handheld.toItemStack(), click -> {
+                        if (click.getClick() != ClickType.LEFT) return;
                         boolean offHand = click.isRightClick();
                         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
                         Handheld removed = handheld.remove(player, offHand);

@@ -31,7 +31,6 @@ public final class Gui implements InventoryHolder {
     private Map<Integer, Slot> slots = new HashMap<>();
     private Consumer<InventoryCloseEvent> onClose = null;
     private Consumer<InventoryOpenEvent> onOpen = null;
-    @Getter @Setter private boolean editable = false;
     @Getter private int size = 3 * 9;
     @Getter private Component title;
     boolean locked = false;
@@ -152,9 +151,7 @@ public final class Gui implements InventoryHolder {
     }
 
     void onInventoryClick(InventoryClickEvent event) {
-        if (!editable) {
-            event.setCancelled(true);
-        }
+        event.setCancelled(true);
         if (locked) return;
         if (!(event.getWhoClicked() instanceof Player)) return;
         Player player = (Player) event.getWhoClicked();
@@ -173,9 +170,7 @@ public final class Gui implements InventoryHolder {
     }
 
     void onInventoryDrag(InventoryDragEvent event) {
-        if (!editable) {
-            event.setCancelled(true);
-        }
+        event.setCancelled(true);
     }
 
     public static final class EventListener implements Listener {
