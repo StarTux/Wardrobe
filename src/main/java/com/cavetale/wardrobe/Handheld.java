@@ -2,6 +2,7 @@ package com.cavetale.wardrobe;
 
 import com.cavetale.mytems.Mytems;
 import java.util.Arrays;
+import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -11,7 +12,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public enum Handheld {
+@Getter
+public enum Handheld implements WardrobeItem {
     RED_LIGHTSABER(Component.text("Red Laser Sword", TextColor.color(0xff1d0b)), Mytems.RED_LIGHTSABER),
     BLUE_LIGHTSABER(Component.text("Blue Laser Sword", TextColor.color(0xadf3f3)), Mytems.BLUE_LIGHTSABER);
 

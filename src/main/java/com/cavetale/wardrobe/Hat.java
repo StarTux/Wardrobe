@@ -2,6 +2,7 @@ package com.cavetale.wardrobe;
 
 import com.cavetale.mytems.Mytems;
 import java.util.Arrays;
+import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -10,7 +11,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public enum Hat {
+@Getter
+public enum Hat implements WardrobeItem {
     WHITE_BUNNY_EARS(Component.text("White Bunny Ears", TextColor.color(0xFFFFFF)), Mytems.WHITE_BUNNY_EARS);
 
     public final Component displayName;
