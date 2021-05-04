@@ -12,8 +12,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public enum Handheld {
-    RED_LIGHTSABER(Component.text("Red Lightsaber", TextColor.color(0xff1d0b)), Mytems.RED_LIGHTSABER),
-    BLUE_LIGHTSABER(Component.text("Blue Lightsaber", TextColor.color(0xadf3f3)), Mytems.BLUE_LIGHTSABER);
+    RED_LIGHTSABER(Component.text("Red Laser Sword", TextColor.color(0xff1d0b)), Mytems.RED_LIGHTSABER),
+    BLUE_LIGHTSABER(Component.text("Blue Laser Sword", TextColor.color(0xadf3f3)), Mytems.BLUE_LIGHTSABER);
 
     public final Component displayName;
     public final Mytems mytems;
