@@ -67,6 +67,14 @@
       <scope>provided</scope>
     </dependency>
 
+    <!-- Core -->
+    <dependency>
+      <groupId>com.cavetale.core</groupId>
+      <artifactId>core</artifactId>
+      <version>0.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+
     <!-- Mytems -->
     <dependency>
       <groupId>com.cavetale.mytems</groupId>

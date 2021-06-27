@@ -1,5 +1,6 @@
 package com.cavetale.wardrobe;
 
+import com.cavetale.core.font.DefaultFont;
 import com.cavetale.wardrobe.sql.SQLPackage;
 import com.cavetale.wardrobe.util.Gui;
 import com.winthier.playercache.PlayerCache;
@@ -11,6 +12,8 @@ import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Sound;
@@ -20,13 +23,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 @RequiredArgsConstructor
 public final class WardrobeCommand implements TabExecutor {
     private final WardrobePlugin plugin;
-    public static final int COLOR = 0x4169E1;
+    public static final TextColor COLOR = TextColor.color(0x4169E1);
+    public static final TextColor BG = TextColor.color(0xE6C573);
 
     public void enable() {
         plugin.getCommand("wardrobe").setExecutor(this);
@@ -76,8 +81,12 @@ public final class WardrobeCommand implements TabExecutor {
             if (pack.costume != null) unlocked.add(pack.costume);
             if (pack.handheld != null) unlocked.add(pack.handheld);
         }
-        Gui gui = new Gui(plugin).title(Component.text("Wardrobe").color(TextColor.color(COLOR)).decorate(TextDecoration.BOLD));
-        gui.size(9);
+        int size = 9;
+        Component title = Component.text()
+            .append(DefaultFont.guiBlankOverlay(size, BG))
+            .append(Component.text("Wardrobe").color(COLOR).decorate(TextDecoration.BOLD))
+            .build();
+        Gui gui = new Gui(plugin).title(title).size(size);
         int itemIndex = 0;
         for (Hat hat : Hat.values()) {
             int slot = itemIndex++;
@@ -87,12 +96,12 @@ public final class WardrobeCommand implements TabExecutor {
                         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
                         Hat removed = hat.remove(player);
                         if (removed == hat) {
-                            player.sendMessage(Component.text("Hat removed: ").color(TextColor.color(COLOR))
+                            player.sendMessage(Component.text("Hat removed: ").color(COLOR)
                                                .append(removed.displayName));
                             return;
                         }
                         if (hat.wear(player)) {
-                            player.sendMessage(Component.text("Hat equipped: ").color(TextColor.color(COLOR))
+                            player.sendMessage(Component.text("Hat equipped: ").color(COLOR)
                                                .append(hat.displayName));
                         } else {
                             player.sendMessage(Component.text("Cannot equip ").color(TextColor.color(0xFF0000))
@@ -101,7 +110,7 @@ public final class WardrobeCommand implements TabExecutor {
                         }
                     });
             } else {
-                gui.setItem(slot, unowned(hat.toItemStack()));
+                gui.setItem(slot, unowned(hat.toItemStack()), this::clickUnowned);
             }
         }
         for (Costume costume : Costume.values()) {
@@ -111,15 +120,15 @@ public final class WardrobeCommand implements TabExecutor {
                         if (click.getClick() != ClickType.LEFT) return;
                         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
                         if (costume == Costume.remove(player)) {
-                            player.sendMessage(Component.text("Costume removed!").color(TextColor.color(COLOR)));
+                            player.sendMessage(Component.text("Costume removed!").color(COLOR));
                             return;
                         }
                         costume.wear(player);
-                        player.sendMessage(Component.text("Costume equipped: ").color(TextColor.color(COLOR))
+                        player.sendMessage(Component.text("Costume equipped: ").color(COLOR)
                                            .append(costume.displayName));
                     });
             } else {
-                gui.setItem(slot, unowned(costume.toPlayerHead()));
+                gui.setItem(slot, unowned(costume.toPlayerHead()), this::clickUnowned);
             }
         }
         for (Handheld handheld : Handheld.values()) {
@@ -131,12 +140,12 @@ public final class WardrobeCommand implements TabExecutor {
                         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
                         Handheld removed = handheld.remove(player, offHand);
                         if (removed == handheld) {
-                            player.sendMessage(Component.text("Handheld removed: ").color(TextColor.color(COLOR))
+                            player.sendMessage(Component.text("Handheld removed: ").color(COLOR)
                                                .append(removed.displayName));
                             return;
                         }
                         if (handheld.hold(player, offHand)) {
-                            player.sendMessage(Component.text("Handheld equipped: ").color(TextColor.color(COLOR))
+                            player.sendMessage(Component.text("Handheld equipped: ").color(COLOR)
                                                .append(handheld.displayName));
                         } else {
                             player.sendMessage(Component.text("Cannot equip ").color(TextColor.color(0xFF0000))
@@ -145,7 +154,7 @@ public final class WardrobeCommand implements TabExecutor {
                         }
                     });
             } else {
-                gui.setItem(slot, unowned(handheld.toItemStack()));
+                gui.setItem(slot, unowned(handheld.toItemStack()), this::clickUnowned);
             }
         }
         gui.open(player);
@@ -153,12 +162,26 @@ public final class WardrobeCommand implements TabExecutor {
 
     ItemStack unowned(ItemStack in) {
         ItemMeta meta = in.getItemMeta();
-        meta.lore(Arrays.asList(Component.text("Purchase this item at ").color(TextColor.color(COLOR))
+        meta.lore(Arrays.asList(Component.text("Purchase this item at ").color(COLOR)
                                 .decoration(TextDecoration.ITALIC, false),
-                                Component.text("store.cavetale.com").color(TextColor.color(COLOR))
+                                Component.text("store.cavetale.com").color(COLOR)
                                 .decorate(TextDecoration.UNDERLINED).decoration(TextDecoration.ITALIC, false)));
         in.setItemMeta(meta);
         return in;
+    }
+
+    void clickUnowned(InventoryClickEvent event) {
+        if (!(event.getWhoClicked() instanceof Player)) return;
+        Player player = (Player) event.getWhoClicked();
+        Component url = Component.text("store.cavetale.com", COLOR, TextDecoration.UNDERLINED);
+        player.sendMessage(Component.text()
+                           .append(Component.newline())
+                           .append(Component.text("Purchase this item at ", COLOR))
+                           .append(url)
+                           .clickEvent(ClickEvent.openUrl("https://store.cavetale.com"))
+                           .hoverEvent(HoverEvent.showText(url))
+                           .append(Component.newline())
+                           .build());
     }
 
     @Override
