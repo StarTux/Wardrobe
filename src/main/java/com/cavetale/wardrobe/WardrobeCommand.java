@@ -1,9 +1,11 @@
 package com.cavetale.wardrobe;
 
-import com.cavetale.core.font.DefaultFont;
+import com.cavetale.core.font.GuiOverlay;
 import com.cavetale.wardrobe.sql.SQLPackage;
 import com.cavetale.wardrobe.util.Gui;
+import com.cavetale.wardrobe.util.Items;
 import com.winthier.playercache.PlayerCache;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -11,9 +13,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Sound;
@@ -30,10 +34,20 @@ import org.bukkit.inventory.meta.ItemMeta;
 @RequiredArgsConstructor
 public final class WardrobeCommand implements TabExecutor {
     private final WardrobePlugin plugin;
-    public static final TextColor COLOR = TextColor.color(0x4169E1);
-    public static final TextColor BG = TextColor.color(0xE6C573);
+    public static final TextColor BG = TextColor.color(0x008080);
+    public static final TextColor COLOR = TextColor.color(0xDAA520);
+    private final List<MenuButton> menuButtonList = new ArrayList<>();
+
+    @Value
+    private static final class MenuButton {
+        protected final Category category;
+    }
 
     public void enable() {
+        menuButtonList.clear();
+        for (Category category : Category.values()) {
+            menuButtonList.add(new MenuButton(category));
+        }
         plugin.getCommand("wardrobe").setExecutor(this);
     }
 
@@ -66,101 +80,53 @@ public final class WardrobeCommand implements TabExecutor {
         return true;
     }
 
-    void openGui(Player player) {
+    protected void openGui(Player player) {
         plugin.database.find(SQLPackage.class)
             .eq("player", player.getUniqueId())
             .findListAsync(list -> openGui(player, list));
     }
 
-    void openGui(Player player, List<SQLPackage> packages) {
-        Set<Enum> unlocked = new HashSet<>();
+    protected void openGui(Player player, List<SQLPackage> packages) {
+        Set<WardrobeItem> unlocked = new HashSet<>();
         for (SQLPackage row : packages) {
             Package pack = row.getPackage();
-            if (pack == null) continue;
-            if (pack.hat != null) unlocked.add(pack.hat);
-            if (pack.costume != null) unlocked.add(pack.costume);
-            if (pack.handheld != null) unlocked.add(pack.handheld);
+            unlocked.addAll(pack.wardrobeItems);
         }
-        int size = 9;
-        Component title = Component.text()
-            .append(DefaultFont.guiBlankOverlay(size, BG))
-            .append(Component.text("Wardrobe").color(COLOR).decorate(TextDecoration.BOLD))
-            .build();
+        int size = 3 * 9;
+        Component title = GuiOverlay.TOP_BAR.make(size, BG, Component.text("Wardrobe", COLOR));
         Gui gui = new Gui(plugin).title(title).size(size);
-        int itemIndex = 0;
-        for (Hat hat : Hat.values()) {
-            int slot = itemIndex++;
-            if (unlocked.contains(hat)) {
-                gui.setItem(slot, hat.toItemStack(), click -> {
-                        if (click.getClick() != ClickType.LEFT) return;
-                        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
-                        Hat removed = hat.remove(player);
-                        if (removed == hat) {
-                            player.sendMessage(Component.text("Hat removed: ").color(COLOR)
-                                               .append(removed.displayName));
-                            return;
-                        }
-                        if (hat.wear(player)) {
-                            player.sendMessage(Component.text("Hat equipped: ").color(COLOR)
-                                               .append(hat.displayName));
-                        } else {
-                            player.sendMessage(Component.text("Cannot equip ").color(TextColor.color(0xFF0000))
-                                               .append(hat.displayName)
-                                               .append(Component.text(": Inventory is full!").color(TextColor.color(0xFF0000))));
-                        }
-                    });
-            } else {
-                gui.setItem(slot, unowned(hat.toItemStack()), this::clickUnowned);
+        int topBarIndex = 2;
+        for (MenuButton menuButton : menuButtonList) {
+            if (menuButton.category != null) {
+                Category category = menuButton.category;
+                gui.setItem(topBarIndex++,
+                            Items.text(category.wardrobeItems.get(0).toMenuItem(),
+                                       List.of(category.displayName,
+                                               Component.text("Category", NamedTextColor.DARK_GRAY))),
+                            (p, click) -> onClickCategory(p, click, category, unlocked));
             }
         }
-        for (Costume costume : Costume.values()) {
-            int slot = itemIndex++;
-            if (unlocked.contains(costume)) {
-                gui.setItem(slot, costume.toPlayerHead(), click -> {
-                        if (click.getClick() != ClickType.LEFT) return;
-                        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
-                        if (costume == Costume.remove(player)) {
-                            player.sendMessage(Component.text("Costume removed!").color(COLOR));
-                            return;
-                        }
-                        costume.wear(player);
-                        player.sendMessage(Component.text("Costume equipped: ").color(COLOR)
-                                           .append(costume.displayName));
-                    });
-            } else {
-                gui.setItem(slot, unowned(costume.toPlayerHead()), this::clickUnowned);
-            }
-        }
-        for (Handheld handheld : Handheld.values()) {
-            int slot = itemIndex++;
-            if (unlocked.contains(handheld)) {
-                gui.setItem(slot, handheld.toItemStack(), click -> {
-                        if (click.getClick() != ClickType.LEFT) return;
-                        boolean offHand = click.isRightClick();
-                        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
-                        Handheld removed = handheld.remove(player, offHand);
-                        if (removed == handheld) {
-                            player.sendMessage(Component.text("Handheld removed: ").color(COLOR)
-                                               .append(removed.displayName));
-                            return;
-                        }
-                        if (handheld.hold(player, offHand)) {
-                            player.sendMessage(Component.text("Handheld equipped: ").color(COLOR)
-                                               .append(handheld.displayName));
-                        } else {
-                            player.sendMessage(Component.text("Cannot equip ").color(TextColor.color(0xFF0000))
-                                               .append(handheld.displayName)
-                                               .append(Component.text(": Hand is full!").color(TextColor.color(0xFF0000))));
-                        }
-                    });
-            } else {
-                gui.setItem(slot, unowned(handheld.toItemStack()), this::clickUnowned);
-            }
-        }
+        fillCategory(player, gui, Category.WHITE_BUNNY, unlocked);
         gui.open(player);
     }
 
-    ItemStack unowned(ItemStack in) {
+    protected void fillCategory(Player player, Gui gui, Category category, Set<WardrobeItem> unlocked) {
+        for (int i = 0; i < gui.getSize() - 9; i += 1) {
+            int index = i + 9;
+            if (i >= category.wardrobeItems.size()) {
+                gui.setItem(index, null);
+                continue;
+            }
+            WardrobeItem wardrobeItem = category.wardrobeItems.get(i);
+            if (unlocked.contains(wardrobeItem)) {
+                gui.setItem(index, wardrobeItem.toMenuItem(), wardrobeItem::onClick);
+            } else {
+                gui.setItem(index, unowned(wardrobeItem.toMenuItem()), this::onClickUnowned);
+            }
+        }
+    }
+
+    protected ItemStack unowned(ItemStack in) {
         ItemMeta meta = in.getItemMeta();
         meta.lore(Arrays.asList(Component.text("Purchase this item at ").color(COLOR)
                                 .decoration(TextDecoration.ITALIC, false),
@@ -170,18 +136,26 @@ public final class WardrobeCommand implements TabExecutor {
         return in;
     }
 
-    void clickUnowned(InventoryClickEvent event) {
-        if (!(event.getWhoClicked() instanceof Player)) return;
-        Player player = (Player) event.getWhoClicked();
-        Component url = Component.text("store.cavetale.com", COLOR, TextDecoration.UNDERLINED);
+    protected void onClickUnowned(Player player, InventoryClickEvent event) {
+        if (event.getClick() != ClickType.LEFT) return;
+        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
+        Component url = Component.text("store.cavetale.com/wardrobe", COLOR, TextDecoration.UNDERLINED);
         player.sendMessage(Component.text()
                            .append(Component.newline())
                            .append(Component.text("Purchase this item at ", COLOR))
                            .append(url)
-                           .clickEvent(ClickEvent.openUrl("https://store.cavetale.com"))
+                           .clickEvent(ClickEvent.openUrl("https://store.cavetale.com/category/wardrobe"))
                            .hoverEvent(HoverEvent.showText(url))
                            .append(Component.newline())
                            .build());
+    }
+
+    protected void onClickCategory(Player player, InventoryClickEvent event, Category category, Set<WardrobeItem> unlocked) {
+        if (event.getClick() != ClickType.LEFT) return;
+        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
+        Gui gui = Gui.of(player);
+        if (gui == null) return;
+        fillCategory(player, gui, category, unlocked);
     }
 
     @Override

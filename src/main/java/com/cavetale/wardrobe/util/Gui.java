@@ -3,11 +3,11 @@ package com.cavetale.wardrobe.util;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -39,7 +39,7 @@ public final class Gui implements InventoryHolder {
     private static final class Slot {
         final int index;
         ItemStack item;
-        Consumer<InventoryClickEvent> onClick;
+        BiConsumer<Player, InventoryClickEvent> onClick;
     }
 
     public Gui(final JavaPlugin plugin) {
@@ -91,7 +91,7 @@ public final class Gui implements InventoryHolder {
         setItem(index, item, null);
     }
 
-    public void setItem(int index, ItemStack item, Consumer<InventoryClickEvent> responder) {
+    public void setItem(int index, ItemStack item, BiConsumer<Player, InventoryClickEvent> responder) {
         if (inventory != null && index >= 0 && inventory.getSize() > index) {
             inventory.setItem(index, item);
         }
@@ -100,7 +100,7 @@ public final class Gui implements InventoryHolder {
         slots.put(index, slot);
     }
 
-    public void setItem(int column, int row, ItemStack item, Consumer<InventoryClickEvent> responder) {
+    public void setItem(int column, int row, ItemStack item, BiConsumer<Player, InventoryClickEvent> responder) {
         if (column < 0 || column > 8) {
             throw new IllegalArgumentException("column=" + column);
         }
@@ -164,7 +164,7 @@ public final class Gui implements InventoryHolder {
             locked = true;
             Bukkit.getScheduler().runTask(plugin, () -> {
                     locked = false;
-                    slot.onClick.accept(event);
+                    slot.onClick.accept(player, event);
                 });
         }
     }

@@ -2,10 +2,13 @@ package com.cavetale.wardrobe;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Abstraction for an ItemStack which is belongs in the wardrobe.
+ * Abstraction for Hat, Handheld, and Costume.  The first two are
+ * actual items.
  */
 public interface WardrobeItem {
     static WardrobeItem of(ItemStack itemStack) {
@@ -18,4 +21,8 @@ public interface WardrobeItem {
     }
 
     Component getDisplayName();
+
+    ItemStack toMenuItem();
+
+    void onClick(Player player, InventoryClickEvent event);
 }

@@ -7,7 +7,11 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -98,7 +102,8 @@ public enum Handheld implements WardrobeItem {
         return null;
     }
 
-    public ItemStack toItemStack() {
+    @Override
+    public ItemStack toMenuItem() {
         ItemStack itemStack = mytems.getMytem().createItemStack();
         ItemMeta meta = itemStack.getItemMeta();
         meta.displayName(displayName.decoration(TextDecoration.ITALIC, false));
@@ -115,5 +120,25 @@ public enum Handheld implements WardrobeItem {
         meta.addItemFlags(ItemFlag.values());
         itemStack.setItemMeta(meta);
         return itemStack;
+    }
+
+    @Override
+    public void onClick(Player player, InventoryClickEvent event) {
+        if (event.getClick() != ClickType.LEFT && event.getClick() != ClickType.RIGHT) return;
+        boolean offHand = event.isRightClick();
+        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
+        if (this == remove(player, offHand)) {
+            player.sendMessage(Component.text("Handheld removed: ").color(WardrobeCommand.COLOR)
+                               .append(displayName));
+            return;
+        }
+        if (hold(player, offHand)) {
+            player.sendMessage(Component.text("Handheld equipped: ").color(WardrobeCommand.COLOR)
+                               .append(displayName));
+        } else {
+            player.sendMessage(Component.text("Cannot equip ").color(TextColor.color(0xFF0000))
+                               .append(displayName)
+                               .append(Component.text(": Hand is full!").color(TextColor.color(0xFF0000))));
+        }
     }
 }

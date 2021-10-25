@@ -1,28 +1,57 @@
-
 package com.cavetale.wardrobe;
+
+import java.util.List;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 /*
  * One package of items purchasable by player.
  */
 public enum Package {
-    WHITE_BUNNY(Hat.WHITE_BUNNY_EARS, Costume.WHITE_BUNNY),
-    RED_LIGHTSABER(Handheld.RED_LIGHTSABER),
-    BLUE_LIGHTSABER(Handheld.BLUE_LIGHTSABER);
+    WHITE_BUNNY(Component.text("White Bunny", NamedTextColor.WHITE),
+                Hat.WHITE_BUNNY_EARS, Costume.WHITE_BUNNY),
+    RED_LIGHTSABER(Component.text("Red Laser Sword", NamedTextColor.RED),
+                   Handheld.RED_LIGHTSABER),
+    BLUE_LIGHTSABER(Component.text("Red Laser Sword", NamedTextColor.BLUE),
+                    Handheld.BLUE_LIGHTSABER),
+    PIRATE_HAT(Component.text("Pirate Hat", NamedTextColor.GRAY),
+               Hat.PIRATE_HAT),
+    COWBOY_HAT(Component.text("Cowboy Hat", NamedTextColor.GOLD),
+               Hat.COWBOY_HAT),
+    ANGEL_HALO(Component.text("Angel Halo", NamedTextColor.YELLOW),
+               Hat.ANGEL_HALO),
+    CAT_EARS(Component.text("Cat Ears", NamedTextColor.WHITE),
+             Hat.BLACK_CAT_EARS,
+             Hat.CYAN_CAT_EARS,
+             Hat.LIGHT_BLUE_CAT_EARS,
+             Hat.LIME_CAT_EARS,
+             Hat.ORANGE_CAT_EARS,
+             Hat.PINK_CAT_EARS,
+             Hat.RED_CAT_EARS,
+             Hat.WHITE_CAT_EARS),
+    SUNGLASSES(Component.text("Sunglasses", NamedTextColor.LIGHT_PURPLE),
+               Hat.BLACK_SUNGLASSES,
+               Hat.RED_SUNGLASSES,
+               Hat.GREEN_SUNGLASSES,
+               Hat.BLUE_SUNGLASSES,
+               Hat.PURPLE_SUNGLASSES,
+               Hat.CYAN_SUNGLASSES,
+               Hat.LIGHT_GRAY_SUNGLASSES,
+               Hat.GRAY_SUNGLASSES,
+               Hat.PINK_SUNGLASSES,
+               Hat.LIME_SUNGLASSES,
+               Hat.YELLOW_SUNGLASSES,
+               Hat.LIGHT_BLUE_SUNGLASSES,
+               Hat.MAGENTA_SUNGLASSES,
+               Hat.ORANGE_SUNGLASSES,
+               Hat.WHITE_SUNGLASSES);
 
-    public final Hat hat;
-    public final Costume costume;
-    public final Handheld handheld;
+    public final Component displayName;
+    public final List<WardrobeItem> wardrobeItems;
 
-    Package(final Hat hat, final Costume costume) {
-        this.hat = hat;
-        this.costume = costume;
-        this.handheld = null;
-    }
-
-    Package(final Handheld handheld) {
-        this.hat = null;
-        this.costume = null;
-        this.handheld = handheld;
+    Package(final Component displayName, final WardrobeItem... wardrobeItems) {
+        this.displayName = displayName;
+        this.wardrobeItems = List.of(wardrobeItems);
     }
 
     public static Package of(String in) {

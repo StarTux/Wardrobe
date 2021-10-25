@@ -6,16 +6,23 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-public enum Costume {
+@Getter
+public enum Costume implements WardrobeItem {
+    @SuppressWarnings("LineLength")
     WHITE_BUNNY(Component.text("White Bunny Costume", TextColor.color(0xFFFFFF)),
                 UUID.fromString("78749587-49cd-470b-b12a-666cde5d"),
                 "ewogICJ0aW1lc3RhbXAiIDogMTYxNzQ3NTc1ODI1NSwKICAicHJvZmlsZUlkIiA6ICI3ODc0OTU4NzQ5Y2Q0NzBiYjEyYTY2NmNkZTVkODVmMCIsCiAgInByb2ZpbGVOYW1lIiA6ICJNYW50cmlYeEQiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzQyNzllOGIyYmExZTFhNDI4OTkwMzBjMjBhOThhYjQzNWQyOWRmNzVhNDZmOWM1ZTVlMGQ3MzkxOGQzOGIzNyIKICAgIH0KICB9Cn0=",
@@ -59,7 +66,8 @@ public enum Costume {
         return profile;
     }
 
-    public ItemStack toPlayerHead() {
+    @Override
+    public ItemStack toMenuItem() {
         ItemStack itemStack = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
         meta.displayName(displayName.decoration(TextDecoration.ITALIC, false));
@@ -69,5 +77,18 @@ public enum Costume {
         meta.setPlayerProfile(toPlayerProfile());
         itemStack.setItemMeta(meta);
         return itemStack;
+    }
+
+    @Override
+    public void onClick(Player player, InventoryClickEvent event) {
+        if (event.getClick() != ClickType.LEFT) return;
+        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
+        if (this == remove(player)) {
+            player.sendMessage(Component.text("Costume removed!").color(WardrobeCommand.COLOR));
+            return;
+        }
+        wear(player);
+        player.sendMessage(Component.text("Costume equipped: ").color(WardrobeCommand.COLOR)
+                           .append(displayName));
     }
 }
