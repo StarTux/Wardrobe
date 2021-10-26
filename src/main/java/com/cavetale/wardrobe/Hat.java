@@ -33,7 +33,7 @@ public enum Hat implements WardrobeItem {
     RED_CAT_EARS(Component.text("Red Cat Ears", BlockColor.RED.textColor), Mytems.RED_CAT_EARS),
     WHITE_CAT_EARS(Component.text("White Cat Ears", BlockColor.WHITE.textColor), Mytems.WHITE_CAT_EARS),
     // Sunglasses
-    BLACK_SUNGLASSES(Component.text("Black Sunglasses", BlockColor.BLACK.textColor), Mytems.BLACK_SUNGLASSES),
+    BLACK_SUNGLASSES(Component.text("Black Sunglasses", BlockColor.GRAY.textColor), Mytems.BLACK_SUNGLASSES),
     RED_SUNGLASSES(Component.text("Red Sunglasses", BlockColor.RED.textColor), Mytems.RED_SUNGLASSES),
     GREEN_SUNGLASSES(Component.text("Green Sunglasses", BlockColor.GREEN.textColor), Mytems.GREEN_SUNGLASSES),
     BLUE_SUNGLASSES(Component.text("Blue Sunglasses", BlockColor.BLUE.textColor), Mytems.BLUE_SUNGLASSES),

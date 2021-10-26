@@ -34,7 +34,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 @RequiredArgsConstructor
 public final class WardrobeCommand implements TabExecutor {
     private final WardrobePlugin plugin;
-    public static final TextColor BG = TextColor.color(0x008080);
+    public static final TextColor BG = TextColor.color(0xA080A0);
     public static final TextColor COLOR = TextColor.color(0xDAA520);
     private final List<MenuButton> menuButtonList = new ArrayList<>();
 

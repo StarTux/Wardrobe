@@ -20,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
 @RequiredArgsConstructor
 public final class EventListener implements Listener {
     private final WardrobePlugin plugin;
-    public static final int COLOR = 0x4169E1;
+    public static final TextColor COLOR = WardrobeCommand.COLOR;
 
     void enable() {
         Bukkit.getPluginManager().registerEvents(this, plugin);
@@ -41,7 +41,7 @@ public final class EventListener implements Listener {
         if (clickedWardrobeItem != null) {
             event.setCancelled(true);
             event.setCurrentItem(null);
-            player.sendMessage(Component.text("Wardrobe item removed: ").color(TextColor.color(COLOR))
+            player.sendMessage(Component.text("Wardrobe item removed: ").color(COLOR)
                                .append(clickedWardrobeItem.getDisplayName()));
             player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
         }
@@ -57,7 +57,7 @@ public final class EventListener implements Listener {
                 if (hotbarWardrobeItem != null) {
                     event.setCancelled(true);
                     player.getInventory().setItem(hotbarSlot, null);
-                    player.sendMessage(Component.text("Wardrobe item removed: ").color(TextColor.color(COLOR))
+                    player.sendMessage(Component.text("Wardrobe item removed: ").color(COLOR)
                                        .append(hotbarWardrobeItem.getDisplayName()));
                 }
                 break;
@@ -68,7 +68,7 @@ public final class EventListener implements Listener {
                 if (offhandWardrobeItem != null) {
                     event.setCancelled(true);
                     player.getInventory().setItemInOffHand(null);
-                    player.sendMessage(Component.text("Wardrobe item removed: ").color(TextColor.color(COLOR))
+                    player.sendMessage(Component.text("Wardrobe item removed: ").color(COLOR)
                                        .append(offhandWardrobeItem.getDisplayName()));
                 }
                 break;
@@ -91,7 +91,7 @@ public final class EventListener implements Listener {
             if (wardrobeItem != null) {
                 event.setCancelled(true);
                 event.getView().setItem(rawSlot, null);
-                player.sendMessage(Component.text("Wardrobe item removed: ").color(TextColor.color(COLOR))
+                player.sendMessage(Component.text("Wardrobe item removed: ").color(COLOR)
                                    .append(wardrobeItem.getDisplayName()));
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
                 continue;
