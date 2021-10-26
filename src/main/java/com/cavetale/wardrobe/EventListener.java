@@ -31,6 +31,8 @@ public final class EventListener implements Listener {
         if (!(event.getWhoClicked() instanceof Player)) return;
         Player player = (Player) event.getWhoClicked();
         Inventory clickedInventory = event.getClickedInventory();
+        if (clickedInventory == null) return;
+        // The Wardrobe GUI is exempt.
         Gui gui = Gui.of(player);
         if (gui != null && clickedInventory.equals(gui.getInventory())) return;
         // When a WardrobeItem was clicked in the inventory, remove it!
