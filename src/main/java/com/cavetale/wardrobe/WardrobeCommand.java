@@ -34,8 +34,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 @RequiredArgsConstructor
 public final class WardrobeCommand implements TabExecutor {
     private final WardrobePlugin plugin;
-    public static final TextColor BG = TextColor.color(0xA080A0);
-    public static final TextColor COLOR = TextColor.color(0xDAA520);
+    public static final TextColor BG = TextColor.color(0x8080D0);
+    public static final TextColor COLOR = TextColor.color(0xD08080);
     private final List<MenuButton> menuButtonList = new ArrayList<>();
 
     @Value
@@ -93,7 +93,11 @@ public final class WardrobeCommand implements TabExecutor {
             unlocked.addAll(pack.wardrobeItems);
         }
         int size = 3 * 9;
-        Component title = GuiOverlay.TOP_BAR.make(size, BG, Component.text("Wardrobe", COLOR));
+        Component title = GuiOverlay.builder(size)
+            .layer(GuiOverlay.BLANK, COLOR)
+            .layer(GuiOverlay.TOP_BAR, BG)
+            .title(Component.text("Wardrobe", COLOR))
+            .build();
         Gui gui = new Gui(plugin).title(title).size(size);
         int topBarIndex = 2;
         for (MenuButton menuButton : menuButtonList) {
