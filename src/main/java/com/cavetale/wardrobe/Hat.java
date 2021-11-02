@@ -1,20 +1,18 @@
 package com.cavetale.wardrobe;
 
 import com.cavetale.mytems.Mytems;
-import java.util.Arrays;
+import com.cavetale.wardrobe.util.Items;
+import java.util.List;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 @Getter
 public enum Hat implements WardrobeItem {
@@ -23,6 +21,16 @@ public enum Hat implements WardrobeItem {
     PIRATE_HAT(Component.text("Pirate Hat", NamedTextColor.GRAY), Mytems.PIRATE_HAT),
     COWBOY_HAT(Component.text("Cowboy Hat", NamedTextColor.GOLD), Mytems.COWBOY_HAT),
     ANGEL_HALO(Component.text("Angel Halo", NamedTextColor.YELLOW), Mytems.ANGEL_HALO),
+    GOLDEN_CROWN(Component.text("Angel Halo", NamedTextColor.GOLD), Mytems.GOLDEN_CROWN),
+    DEVIL_HORNS(Component.text("Devil Horns", NamedTextColor.DARK_RED), Mytems.DEVIL_HORNS),
+    ELF_HAT(Component.text("Elf Hat", NamedTextColor.RED), Mytems.ELF_HAT),
+    FIREMAN_HELMET(Component.text("Fireman Helmet", NamedTextColor.RED), Mytems.FIREMAN_HELMET),
+    PLAGUE_DOCTOR(Component.text("Plague Doctor", NamedTextColor.DARK_GRAY), Mytems.PLAGUE_DOCTOR),
+    PLAGUE_DOCTOR_2(Component.text("Plague Doctor II", NamedTextColor.DARK_GRAY), Mytems.PLAGUE_DOCTOR_2),
+    PUMPKIN_STUB(Component.text("Pumpkin Stub", NamedTextColor.GOLD), Mytems.PUMPKIN_STUB),
+    SANTA_HAT(Component.text("Santa Hat", NamedTextColor.RED), Mytems.STOCKING_CAP),
+    STRAW_HAT(Component.text("Straw Hat", NamedTextColor.YELLOW), Mytems.STRAW_HAT),
+    WITCH_HAT(Component.text("Witch Hat", BlockColor.PURPLE.textColor), Mytems.WITCH_HAT),
     // Cat Ears
     BLACK_CAT_EARS(Component.text("Black Cat Ears", BlockColor.BLACK.textColor), Mytems.BLACK_CAT_EARS),
     CYAN_CAT_EARS(Component.text("Cyan Cat Ears", BlockColor.CYAN.textColor), Mytems.CYAN_CAT_EARS),
@@ -123,11 +131,11 @@ public enum Hat implements WardrobeItem {
     @Override
     public ItemStack toMenuItem() {
         ItemStack itemStack = mytems.getMytem().createItemStack();
-        ItemMeta meta = itemStack.getItemMeta();
-        meta.displayName(displayName.decoration(TextDecoration.ITALIC, false));
-        meta.lore(Arrays.asList(Component.text("Click to equip").color(NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC, false)));
-        meta.addItemFlags(ItemFlag.values());
-        itemStack.setItemMeta(meta);
+        itemStack.editMeta(meta -> {
+                Items.text(meta, List.of(displayName,
+                                         Component.text("Helmet Item", NamedTextColor.DARK_PURPLE),
+                                         Component.text("Click to equip", TextColor.color(0xFFFF00))));
+            });
         return itemStack;
     }
 

@@ -1,8 +1,10 @@
 package com.cavetale.wardrobe.sql;
 
 import com.cavetale.wardrobe.Package;
+import com.cavetale.wardrobe.WardrobePlugin;
 import java.util.Date;
 import java.util.UUID;
+import java.util.logging.Level;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -36,7 +38,7 @@ public final class SQLPackage {
         try {
             return Package.valueOf(packageName.toUpperCase());
         } catch (Exception e) {
-            e.printStackTrace();
+            WardrobePlugin.getInstance().getLogger().log(Level.SEVERE, "" + packageName, e);
             return null;
         }
     }

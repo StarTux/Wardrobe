@@ -29,3 +29,7 @@ permissions:
   wardrobe.admin:
     description: Wardrobe admin
     default: op
+
+  wardrobe.all:
+    description: Unlock all skins
+    default: false

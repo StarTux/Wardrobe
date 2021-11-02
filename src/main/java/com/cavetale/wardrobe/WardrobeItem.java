@@ -1,5 +1,7 @@
 package com.cavetale.wardrobe;
 
+import java.util.ArrayList;
+import java.util.List;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -25,4 +27,12 @@ public interface WardrobeItem {
     ItemStack toMenuItem();
 
     void onClick(Player player, InventoryClickEvent event);
+
+    static List<WardrobeItem> all() {
+        List<WardrobeItem> list = new ArrayList<>();
+        list.addAll(List.of(Hat.values()));
+        list.addAll(List.of(Handheld.values()));
+        list.addAll(List.of(Costume.values()));
+        return list;
+    }
 }

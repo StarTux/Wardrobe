@@ -17,9 +17,21 @@ public enum Package {
     PIRATE_HAT(Component.text("Pirate Hat", NamedTextColor.GRAY),
                Hat.PIRATE_HAT),
     COWBOY_HAT(Component.text("Cowboy Hat", NamedTextColor.GOLD),
-               Hat.COWBOY_HAT),
-    ANGEL_HALO(Component.text("Angel Halo", NamedTextColor.YELLOW),
-               Hat.ANGEL_HALO),
+               Hat.COWBOY_HAT,
+               Costume.GREEN_COWBOY_FROG,
+               Costume.ORANGE_COWBOY_FROG),
+    ANGEL(Component.text("Angel", NamedTextColor.YELLOW),
+          Hat.ANGEL_HALO),
+    DEVIL(Component.text("Devil", NamedTextColor.RED),
+          Hat.DEVIL_HORNS),
+    FIREMAN_HELMET(Hat.FIREMAN_HELMET),
+    PLAGUE_DOCTOR(Hat.PLAGUE_DOCTOR,
+                  Hat.PLAGUE_DOCTOR_2,
+                  Costume.PLAGUE_DOCTOR),
+    PUMPKIN(Hat.PUMPKIN_STUB),
+    SANTA(Hat.SANTA_HAT),
+    STRAW_HAT(Hat.STRAW_HAT),
+    WITCH_HAT(Hat.WITCH_HAT),
     CAT_EARS(Component.text("Cat Ears", NamedTextColor.WHITE),
              Hat.BLACK_CAT_EARS,
              Hat.CYAN_CAT_EARS,
@@ -51,6 +63,11 @@ public enum Package {
 
     Package(final Component displayName, final WardrobeItem... wardrobeItems) {
         this.displayName = displayName;
+        this.wardrobeItems = List.of(wardrobeItems);
+    }
+
+    Package(final WardrobeItem... wardrobeItems) {
+        this.displayName = wardrobeItems[0].getDisplayName();
         this.wardrobeItems = List.of(wardrobeItems);
     }
 
