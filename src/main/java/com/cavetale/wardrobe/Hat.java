@@ -21,7 +21,7 @@ public enum Hat implements WardrobeItem {
     PIRATE_HAT(Component.text("Pirate Hat", NamedTextColor.GRAY), Mytems.PIRATE_HAT),
     COWBOY_HAT(Component.text("Cowboy Hat", NamedTextColor.GOLD), Mytems.COWBOY_HAT),
     ANGEL_HALO(Component.text("Angel Halo", NamedTextColor.YELLOW), Mytems.ANGEL_HALO),
-    GOLDEN_CROWN(Component.text("Angel Halo", NamedTextColor.GOLD), Mytems.GOLDEN_CROWN),
+    GOLDEN_CROWN(Component.text("Golden Crown", NamedTextColor.GOLD), Mytems.GOLDEN_CROWN),
     DEVIL_HORNS(Component.text("Devil Horns", NamedTextColor.DARK_RED), Mytems.DEVIL_HORNS),
     ELF_HAT(Component.text("Elf Hat", NamedTextColor.RED), Mytems.ELF_HAT),
     FIREMAN_HELMET(Component.text("Fireman Helmet", NamedTextColor.RED), Mytems.FIREMAN_HELMET),
