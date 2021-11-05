@@ -7,6 +7,7 @@ import com.cavetale.wardrobe.util.Items;
 import com.winthier.playercache.PlayerCache;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -82,33 +83,39 @@ public final class WardrobeCommand implements TabExecutor {
     }
 
     protected void openGui(Player player) {
+        GuiContext context = new GuiContext();
         if (player.hasPermission("wardrobe.all")) {
-            openGuiWithItems(player, Category.ALL, Set.copyOf(WardrobeItem.all()));
+            context.unlockedPackages.addAll(List.of(Package.values()));
+            context.unlockedItems.addAll(WardrobeItem.all());
+            openGui(player, context);
         } else {
             plugin.database.find(SQLPackage.class)
                 .eq("player", player.getUniqueId())
                 .findListAsync(list -> {
-                        Set<WardrobeItem> unlocked = new HashSet<>();
                         for (SQLPackage row : list) {
                             Package pack = row.getPackage();
                             if (pack == null) continue;
-                            unlocked.addAll(pack.wardrobeItems);
+                            context.unlockedPackages.add(pack);
+                            context.unlockedItems.addAll(pack.wardrobeItems);
                         }
-                        openGuiWithItems(player, Category.ALL, unlocked);
+                        openGui(player, context);
                     });
         }
     }
 
-    protected void openGuiWithItems(Player player, Category category, Set<WardrobeItem> unlocked) {
-        final int size = 6 * 9;
+    protected void openGui(Player player, GuiContext context) {
+        final int size = 3 * 9;
         Component title = GuiOverlay.builder(size)
             .layer(GuiOverlay.BLANK, COLOR)
             .layer(GuiOverlay.TOP_BAR, BG)
             .title(Component.join(JoinConfiguration.noSeparators(),
-                                  category.displayName,
+                                  (context.selectedPackage != null
+                                   ? context.selectedPackage.displayName
+                                   : context.selectedCategory.displayName),
                                   Component.text(" - Wardrobe", COLOR)))
             .build();
         Gui gui = new Gui(plugin).title(title).size(size);
+        context.gui = gui;
         int topBarIndex = 1;
         for (MenuButton menuButton : menuButtonList) {
             if (menuButton.category != null) {
@@ -116,30 +123,76 @@ public final class WardrobeCommand implements TabExecutor {
                             Items.text(menuButton.category.icon,
                                        List.of(menuButton.category.displayName,
                                                Component.text("Category", NamedTextColor.DARK_GRAY))),
-                            (p, click) -> onClickCategory(p, click, menuButton.category, unlocked));
+                            (p, click) -> {
+                                if (click.getClick() != ClickType.LEFT) return;
+                                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK,
+                                                 SoundCategory.MASTER, 1.0f, 1.0f);
+                                context.selectedCategory = menuButton.category;
+                                context.selectedPackage = null;
+                                openGui(p, context);
+                            });
             }
         }
-        fillCategory(player, gui, category, unlocked);
+        if (context.selectedPackage != null) {
+            fillPackage(player, context);
+        } else {
+            fillCategory(player, context);
+        }
         gui.open(player);
     }
 
-    protected void fillCategory(Player player, Gui gui, Category category, Set<WardrobeItem> unlocked) {
-        for (int i = 0; i < gui.getSize() - 9; i += 1) {
+    protected void fillCategory(Player player, GuiContext context) {
+        List<Package> packageList = context.selectedCategory == Category.UNLOCKED
+            ? (context.selectedCategory.packages.stream()
+               .filter(context.unlockedPackages::contains)
+               .collect(Collectors.toList()))
+            : context.selectedCategory.packages;
+        for (int i = 0; i < context.gui.getSize() - 9; i += 1) {
             int index = i + 9;
-            List<WardrobeItem> itemList = category == Category.UNLOCKED
-                ? category.wardrobeItems.stream().filter(unlocked::contains).collect(Collectors.toList())
-                : category.wardrobeItems;
+            if (i >= packageList.size()) {
+                context.gui.setItem(index, null);
+                continue;
+            }
+            Package pack = packageList.get(i);
+            WardrobeItem firstItem = pack.wardrobeItems.get(0);
+            context.gui.setItem(index,
+                                Items.text(firstItem.toMenuItem(),
+                                           List.of(pack.displayName,
+                                                   Component.text("Package", NamedTextColor.DARK_GRAY),
+                                                   (context.unlockedPackages.contains(pack)
+                                                    ? Component.text("Unlocked", NamedTextColor.GREEN)
+                                                    : Component.text("Locked", NamedTextColor.RED)))),
+                                (p, click) -> {
+                                    if (click.getClick() != ClickType.LEFT) return;
+                                    p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK,
+                                                SoundCategory.MASTER, 1.0f, 1.0f);
+                                    context.selectedPackage = pack;
+                                    openGui(p, context);
+                                });
+        }
+    }
+
+    protected void fillPackage(Player player, GuiContext context) {
+        List<WardrobeItem> itemList = context.selectedPackage.wardrobeItems;
+        for (int i = 0; i < context.gui.getSize() - 9; i += 1) {
+            int index = i + 9;
             if (i >= itemList.size()) {
-                gui.setItem(index, null);
+                context.gui.setItem(index, null);
                 continue;
             }
             WardrobeItem wardrobeItem = itemList.get(i);
-            if (unlocked.contains(wardrobeItem)) {
-                gui.setItem(index, wardrobeItem.toMenuItem(), wardrobeItem::onClick);
+            if (context.unlockedItems.contains(wardrobeItem)) {
+                context.gui.setItem(index, wardrobeItem.toMenuItem(), wardrobeItem::onClick);
             } else {
-                gui.setItem(index, unowned(wardrobeItem.toMenuItem()), this::onClickUnowned);
+                context.gui.setItem(index, unowned(wardrobeItem.toMenuItem()), this::onClickUnowned);
             }
         }
+        context.gui.setItem(Gui.OUTSIDE, null, (p, click) -> {
+                player.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK,
+                                 SoundCategory.MASTER, 1.0f, 1.0f);
+                context.selectedPackage = null;
+                openGui(p, context);
+            });
     }
 
     protected ItemStack unowned(ItemStack in) {
@@ -166,16 +219,16 @@ public final class WardrobeCommand implements TabExecutor {
                            .build());
     }
 
-    protected void onClickCategory(Player player, InventoryClickEvent event, Category category, Set<WardrobeItem> unlocked) {
-        if (event.getClick() != ClickType.LEFT) return;
-        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
-        Gui gui = Gui.of(player);
-        if (gui == null) return;
-        openGuiWithItems(player, category, unlocked);
-    }
-
     @Override
     public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias, final String[] args) {
         return Collections.emptyList();
+    }
+
+    protected static final class GuiContext {
+        Gui gui;
+        Category selectedCategory = Category.ALL;
+        Package selectedPackage;
+        Set<Package> unlockedPackages = EnumSet.noneOf(Package.class);
+        Set<WardrobeItem> unlockedItems = new HashSet<>();
     }
 }
