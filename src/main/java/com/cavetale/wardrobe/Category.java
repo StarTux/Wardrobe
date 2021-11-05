@@ -18,7 +18,7 @@ public enum Category {
     COSTUMES(Component.text("Costumes", NamedTextColor.GOLD),
              Package.COWBOY_HAT,
              Package.WHITE_BUNNY),
-    ACCESSORIES(Component.text("Accessories", NamedTextColor.BLUE),
+    ACCESSORIES(Component.text("Accessories", BlockColor.PINK.textColor),
                 Package.SUNGLASSES,
                 Package.CAT_EARS),
     FUTURE_COSTUMES(Component.text("Upcoming Costumes", NamedTextColor.GRAY),

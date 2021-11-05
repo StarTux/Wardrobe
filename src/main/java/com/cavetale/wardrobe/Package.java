@@ -12,7 +12,7 @@ public enum Package {
                 Hat.WHITE_BUNNY_EARS, Costume.WHITE_BUNNY),
     RED_LIGHTSABER(Component.text("Red Laser Sword", NamedTextColor.RED),
                    Handheld.RED_LIGHTSABER),
-    BLUE_LIGHTSABER(Component.text("Red Laser Sword", NamedTextColor.BLUE),
+    BLUE_LIGHTSABER(Component.text("Blue Laser Sword", NamedTextColor.BLUE),
                     Handheld.BLUE_LIGHTSABER),
     PIRATE_HAT(Component.text("Pirate Hat", NamedTextColor.GRAY),
                Hat.PIRATE_HAT,

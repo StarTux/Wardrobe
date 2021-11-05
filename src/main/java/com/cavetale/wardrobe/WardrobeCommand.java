@@ -105,15 +105,21 @@ public final class WardrobeCommand implements TabExecutor {
 
     protected void openGui(Player player, GuiContext context) {
         final int size = 3 * 9;
-        Component title = GuiOverlay.builder(size)
-            .layer(GuiOverlay.BLANK, COLOR)
-            .layer(GuiOverlay.TOP_BAR, BG)
-            .title(Component.join(JoinConfiguration.noSeparators(),
-                                  (context.selectedPackage != null
-                                   ? context.selectedPackage.displayName
-                                   : context.selectedCategory.displayName),
-                                  Component.text(" - Wardrobe", COLOR)))
-            .build();
+        Component title = context.selectedPackage != null
+            ? (GuiOverlay.builder(size) // Package
+               .layer(GuiOverlay.BLANK, TextColor.color(0x302010))
+               .layer(GuiOverlay.TOP_BAR, TextColor.color(0x404050))
+               .title(Component.join(JoinConfiguration.noSeparators(),
+                                     context.selectedPackage.displayName,
+                                     Component.text(" - Package", COLOR)))
+               .build())
+            : (GuiOverlay.builder(size) // Category
+               .layer(GuiOverlay.BLANK, COLOR)
+               .layer(GuiOverlay.TOP_BAR, BG)
+               .title(Component.join(JoinConfiguration.noSeparators(),
+                                     context.selectedCategory.displayName,
+                                     Component.text(" - Wardrobe", COLOR)))
+               .build());
         Gui gui = new Gui(plugin).title(title).size(size);
         context.gui = gui;
         int topBarIndex = 1;
