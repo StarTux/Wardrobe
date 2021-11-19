@@ -30,7 +30,8 @@ public enum Category {
                     Package.PUMPKIN,
                     Package.SANTA,
                     Package.STRAW_HAT,
-                    Package.WITCH_HAT);
+                    Package.WITCH_HAT,
+                    Package.TOP_HAT);
 
     public final Component displayName;
     public final List<Package> packages;

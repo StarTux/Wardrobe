@@ -73,7 +73,10 @@ public enum Package {
                Hat.LIGHT_BLUE_SUNGLASSES,
                Hat.MAGENTA_SUNGLASSES,
                Hat.ORANGE_SUNGLASSES,
-               Hat.WHITE_SUNGLASSES);
+               Hat.WHITE_SUNGLASSES),
+    TOP_HAT(Component.text("Top Hat", NamedTextColor.GRAY),
+            Hat.TOP_HAT,
+            Costume.TUXEDO_CAT);
 
     public final Component displayName;
     public final List<WardrobeItem> wardrobeItems;

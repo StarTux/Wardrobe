@@ -71,7 +71,9 @@ public enum Hat implements WardrobeItem {
     LIGHT_BLUE_SUNGLASSES(Component.text("Light Blue Sunglasses", BlockColor.LIGHT_BLUE.textColor), Mytems.LIGHT_BLUE_SUNGLASSES),
     MAGENTA_SUNGLASSES(Component.text("Magenta Sunglasses", BlockColor.MAGENTA.textColor), Mytems.MAGENTA_SUNGLASSES),
     ORANGE_SUNGLASSES(Component.text("Orange Sunglasses", BlockColor.ORANGE.textColor), Mytems.ORANGE_SUNGLASSES),
-    WHITE_SUNGLASSES(Component.text("White Sunglasses", BlockColor.WHITE.textColor), Mytems.WHITE_SUNGLASSES);
+    WHITE_SUNGLASSES(Component.text("White Sunglasses", BlockColor.WHITE.textColor), Mytems.WHITE_SUNGLASSES),
+    // Top Hat
+    TOP_HAT(Component.text("Top Hat", NamedTextColor.GRAY), Mytems.TOP_HAT);
 
     public final Component displayName;
     public final Mytems mytems;
