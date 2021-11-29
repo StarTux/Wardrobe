@@ -105,7 +105,7 @@ public enum Hat implements WardrobeItem {
             }
         }
         // Helmet slot is empty now!
-        itemStack = mytems.getMytem().createItemStack(player);
+        itemStack = mytems.getMytem().createItemStack();
         player.getInventory().setHelmet(itemStack);
         return true;
     }

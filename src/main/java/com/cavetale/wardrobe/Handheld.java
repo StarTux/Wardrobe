@@ -39,7 +39,7 @@ public enum Handheld implements WardrobeItem {
             return false;
         }
         // Helmet slot is empty now!
-        itemStack = mytems.getMytem().createItemStack(player);
+        itemStack = mytems.getMytem().createItemStack();
         if (offHand) {
             player.getInventory().setItemInOffHand(itemStack);
         } else {
