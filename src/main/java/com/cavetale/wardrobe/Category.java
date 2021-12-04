@@ -16,6 +16,7 @@ public enum Category {
     SWORDS(Component.text("Swords", NamedTextColor.RED),
            Package.RED_LIGHTSABER, Package.BLUE_LIGHTSABER),
     COSTUMES(Component.text("Costumes", NamedTextColor.GOLD),
+             Package.SANTA,
              Package.PIRATE_HAT,
              Package.COWBOY_HAT,
              Package.WHITE_BUNNY),
@@ -28,7 +29,6 @@ public enum Category {
                     Package.FIREMAN_HELMET,
                     Package.PLAGUE_DOCTOR,
                     Package.PUMPKIN,
-                    Package.SANTA,
                     Package.STRAW_HAT,
                     Package.WITCH_HAT,
                     Package.TOP_HAT);
