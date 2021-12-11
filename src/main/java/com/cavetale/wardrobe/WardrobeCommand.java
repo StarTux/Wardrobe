@@ -22,6 +22,8 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.title.Title;
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.command.Command;
@@ -71,6 +73,13 @@ public final class WardrobeCommand implements TabExecutor {
                 sender.sendMessage("" + args[1] + " already owns package " + pack + "!");
             } else {
                 sender.sendMessage(pack + " unlocked for " + args[1]);
+            }
+            Player target = Bukkit.getPlayer(uuid);
+            if (target != null) {
+                target.showTitle(Title.title(pack.displayName,
+                                             Component.text("Wardrobe Unlocked!", NamedTextColor.GREEN)));
+                target.playSound(target.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE,
+                                 SoundCategory.MASTER, 0.5f, 1.5f);
             }
             return true;
         }
