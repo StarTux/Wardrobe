@@ -17,6 +17,7 @@ public enum Category {
            Package.RED_LIGHTSABER, Package.BLUE_LIGHTSABER),
     COSTUMES(Component.text("Costumes", NamedTextColor.GOLD),
              Package.SANTA,
+             Package.ELF_HAT,
              Package.PIRATE_HAT,
              Package.COWBOY_HAT,
              Package.WHITE_BUNNY),
