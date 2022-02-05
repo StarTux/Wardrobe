@@ -197,7 +197,12 @@ public final class WardrobeCommand implements TabExecutor {
             }
             WardrobeItem wardrobeItem = itemList.get(i);
             if (context.unlockedItems.contains(wardrobeItem)) {
-                context.gui.setItem(index, wardrobeItem.toMenuItem(), wardrobeItem::onClick);
+                context.gui.setItem(index, wardrobeItem.toMenuItem(), (p, e) -> {
+                        wardrobeItem.onClick(p, e);
+                        if (wardrobeItem instanceof Costume) {
+                            openGui(p, context);
+                        }
+                    });
             } else {
                 context.gui.setItem(index, unowned(wardrobeItem.toMenuItem()), this::onClickUnowned);
             }
