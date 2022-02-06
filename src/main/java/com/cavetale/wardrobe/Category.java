@@ -32,8 +32,7 @@ public enum Category {
                     Package.FIREMAN_HELMET,
                     Package.PLAGUE_DOCTOR,
                     Package.PUMPKIN,
-                    Package.STRAW_HAT,
-                    Package.WITCH_HAT);
+                    Package.STRAW_HAT);
 
     public final Component displayName;
     public final List<Package> packages;
