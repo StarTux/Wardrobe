@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class WardrobePlugin extends JavaPlugin {
     @Getter protected static WardrobePlugin instance;
     protected WardrobeCommand wardrobeCommand = new WardrobeCommand(this);
+    protected AdminCommand adminCommand = new AdminCommand(this);
     protected EventListener eventListener = new EventListener(this);
     protected SQLDatabase database = new SQLDatabase(this);
 
@@ -24,6 +25,7 @@ public final class WardrobePlugin extends JavaPlugin {
             return;
         }
         wardrobeCommand.enable();
+        adminCommand.enable();
         eventListener.enable();
         Gui.enable(this);
     }
