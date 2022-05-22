@@ -2,6 +2,7 @@ package com.cavetale.wardrobe.sql;
 
 import com.cavetale.wardrobe.Package;
 import com.cavetale.wardrobe.WardrobePlugin;
+import com.winthier.sql.SQLRow;
 import java.util.Date;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -16,7 +17,7 @@ import lombok.Data;
        uniqueConstraints = {
            @UniqueConstraint(columnNames = {"player", "package_name"})
        })
-public final class SQLPackage {
+public final class SQLPackage implements SQLRow {
     @Id
     private Integer id;
     @Column(nullable = false)
