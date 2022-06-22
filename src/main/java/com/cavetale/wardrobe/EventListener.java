@@ -99,7 +99,7 @@ public final class EventListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     void onPlayerQuit(PlayerQuitEvent event) {
         plugin.removeAll(event.getPlayer());
     }

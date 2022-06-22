@@ -3,6 +3,7 @@ package com.cavetale.wardrobe;
 import com.cavetale.wardrobe.sql.SQLPackage;
 import com.cavetale.wardrobe.util.Gui;
 import com.winthier.sql.SQLDatabase;
+import java.util.List;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -18,7 +19,7 @@ public final class WardrobePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        database.registerTables(SQLPackage.class);
+        database.registerTables(List.of(SQLPackage.class));
         if (!database.createAllTables()) {
             getLogger().warning("Database creation failed! Plugin disabled.");
             setEnabled(false);
