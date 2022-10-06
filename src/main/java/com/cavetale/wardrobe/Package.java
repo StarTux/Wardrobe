@@ -84,7 +84,10 @@ public enum Package {
             Costume.TUXEDO_CAT),
     ELF_HAT(Component.text("Elf Hat", NamedTextColor.RED),
             Hat.ELF_HAT,
-            Costume.ELF);
+            Costume.ELF),
+    KOBOLD_HEAD(Component.text("Kobold Head", NamedTextColor.DARK_GREEN),
+                Hat.KOBOLD_HEAD),
+    ;
 
     public final Component displayName;
     public final List<WardrobeItem> wardrobeItems;
