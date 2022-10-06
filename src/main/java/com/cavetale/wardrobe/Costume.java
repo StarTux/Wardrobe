@@ -1,8 +1,11 @@
 package com.cavetale.wardrobe;
 
+import com.cavetale.core.util.Json;
 import com.cavetale.wardrobe.util.Items;
 import com.destroystokyo.paper.profile.PlayerProfile;
-import com.destroystokyo.paper.profile.ProfileProperty;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +23,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.profile.PlayerTextures;
 
 @Getter @SuppressWarnings("LineLength")
 public enum Costume implements WardrobeItem {
@@ -68,14 +72,27 @@ public enum Costume implements WardrobeItem {
     public final UUID uuid;
     public final String texture;
     public final String signature;
+    public final String json;
+    public final URL url;
     static Map<UUID, PlayerProfile> backups = new HashMap<>();
     static Map<UUID, Costume> worn = new HashMap<>();
 
+    @SuppressWarnings("unchecked")
     Costume(final Component displayName, final UUID uuid, final String texture, final String signature) {
         this.displayName = displayName;
         this.uuid = uuid;
         this.texture = texture;
         this.signature = signature;
+        this.json = new String(Base64.getDecoder().decode(texture));
+        Map<String, Object> map = (Map<String, Object>) Json.deserialize(json, Object.class);
+        Map<String, Object> map2 = map;
+        map2 = (Map<String, Object>) map2.get("textures");
+        map2 = (Map<String, Object>) map2.get("SKIN");
+        try {
+            this.url = new URL((String) map2.get("url"));
+        } catch (MalformedURLException murle) {
+            throw new IllegalStateException(murle);
+        }
     }
 
     public void wear(Player player) {
@@ -83,7 +100,9 @@ public enum Costume implements WardrobeItem {
             backups.put(player.getUniqueId(), player.getPlayerProfile());
         }
         PlayerProfile profile = player.getPlayerProfile();
-        profile.setProperty(new ProfileProperty("textures", texture, signature));
+        PlayerTextures textures = profile.getTextures();
+        textures.setSkin(url, PlayerTextures.SkinModel.CLASSIC);
+        profile.setTextures(textures);
         player.setPlayerProfile(profile);
         worn.put(player.getUniqueId(), this);
     }
@@ -98,7 +117,9 @@ public enum Costume implements WardrobeItem {
 
     public PlayerProfile toPlayerProfile() {
         PlayerProfile profile = Bukkit.createProfile(uuid);
-        profile.setProperty(new ProfileProperty("textures", texture, signature));
+        PlayerTextures textures = profile.getTextures();
+        textures.setSkin(url);
+        profile.setTextures(textures);
         return profile;
     }
 

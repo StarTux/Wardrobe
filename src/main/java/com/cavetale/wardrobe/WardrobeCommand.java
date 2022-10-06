@@ -200,7 +200,7 @@ public final class WardrobeCommand implements TabExecutor {
                 context.gui.setItem(index, wardrobeItem.toMenuItem(), (p, e) -> {
                         wardrobeItem.onClick(p, e);
                         if (wardrobeItem instanceof Costume) {
-                            openGui(p, context);
+                            p.closeInventory();
                         }
                     });
             } else {
