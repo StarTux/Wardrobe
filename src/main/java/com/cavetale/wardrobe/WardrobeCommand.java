@@ -179,10 +179,14 @@ public final class WardrobeCommand implements TabExecutor {
                                                     : Component.text("Locked", NamedTextColor.RED)))),
                                 (p, click) -> {
                                     if (click.getClick() != ClickType.LEFT) return;
-                                    p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK,
-                                                SoundCategory.MASTER, 1.0f, 1.0f);
-                                    context.selectedPackage = pack;
-                                    openGui(p, context);
+                                    if (pack.wardrobeItems.size() == 1) {
+                                        pack.wardrobeItems.get(0).onClick(p, click);
+                                    } else {
+                                        p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK,
+                                                    SoundCategory.MASTER, 1.0f, 1.0f);
+                                        context.selectedPackage = pack;
+                                        openGui(p, context);
+                                    }
                                 });
         }
     }
@@ -199,9 +203,6 @@ public final class WardrobeCommand implements TabExecutor {
             if (context.unlockedItems.contains(wardrobeItem)) {
                 context.gui.setItem(index, wardrobeItem.toMenuItem(), (p, e) -> {
                         wardrobeItem.onClick(p, e);
-                        if (wardrobeItem instanceof Costume) {
-                            p.closeInventory();
-                        }
                     });
             } else {
                 context.gui.setItem(index, unowned(wardrobeItem.toMenuItem()), this::onClickUnowned);
