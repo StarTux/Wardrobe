@@ -1,5 +1,6 @@
 package com.cavetale.wardrobe;
 
+import java.util.ArrayList;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -90,7 +91,12 @@ public enum Package {
 
     Package(final Component displayName, final WardrobeItem... wardrobeItems) {
         this.displayName = displayName;
-        this.wardrobeItems = List.of(wardrobeItems);
+        List<WardrobeItem> wardrobeItemList = new ArrayList<>();
+        for (WardrobeItem item : wardrobeItems) {
+            if (item instanceof Costume) continue;
+            wardrobeItemList.add(item);
+        }
+        this.wardrobeItems = List.copyOf(wardrobeItemList);
     }
 
     Package(final WardrobeItem... wardrobeItems) {

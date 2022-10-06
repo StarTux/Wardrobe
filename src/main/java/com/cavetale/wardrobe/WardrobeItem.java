@@ -35,4 +35,6 @@ public interface WardrobeItem {
         list.addAll(List.of(Costume.values()));
         return list;
     }
+
+    String name();
 }
