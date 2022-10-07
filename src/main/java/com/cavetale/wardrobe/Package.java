@@ -77,7 +77,7 @@ public enum Package {
             Costume.TUXEDO_CAT),
     ELF_HAT(Hat.ELF_HAT,
             Costume.ELF),
-    KOBOLD_HEAD(Hat.KOBOLD_HEAD),
+    KOBOLD(Hat.KOBOLD_HEAD),
     ;
 
     public final Component displayName;
