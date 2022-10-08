@@ -20,7 +20,7 @@ public enum Package {
                Costume.ORANGE_COWBOY_FROG),
     ANGEL(Hat.ANGEL_HALO),
     DEVIL(Hat.DEVIL_HORNS),
-    FIREMAN_HELMET(Hat.FIREMAN_HELMET),
+    FIREFIGHTER_HELMET(Hat.FIREFIGHTER_HELMET),
     PLAGUE_DOCTOR(Hat.PLAGUE_DOCTOR,
                   Hat.PLAGUE_DOCTOR_2,
                   Costume.PLAGUE_DOCTOR),

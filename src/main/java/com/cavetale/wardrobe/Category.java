@@ -23,7 +23,7 @@ public enum Category {
          Package.ELF_HAT,
          Package.PIRATE_HAT,
          Package.COWBOY_HAT,
-         Package.FIREMAN_HELMET,
+         Package.FIREFIGHTER_HELMET,
          Package.STRAW_HAT),
     MASKS(Component.text("Masks", NamedTextColor.GOLD),
              Package.KOBOLD,
