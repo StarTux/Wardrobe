@@ -180,7 +180,10 @@ public final class WardrobeCommand implements TabExecutor {
                                 (p, click) -> {
                                     if (click.getClick() != ClickType.LEFT) return;
                                     if (pack.wardrobeItems.size() == 1) {
-                                        pack.wardrobeItems.get(0).onClick(p, click);
+                                        WardrobeItem wardrobeItem = pack.wardrobeItems.get(0);
+                                        if (context.unlockedItems.contains(wardrobeItem)) {
+                                            wardrobeItem.onClick(p, click);
+                                        }
                                     } else {
                                         p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK,
                                                     SoundCategory.MASTER, 1.0f, 1.0f);
