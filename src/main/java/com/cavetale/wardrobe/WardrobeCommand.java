@@ -183,6 +183,8 @@ public final class WardrobeCommand implements TabExecutor {
                                         WardrobeItem wardrobeItem = pack.wardrobeItems.get(0);
                                         if (context.unlockedItems.contains(wardrobeItem)) {
                                             wardrobeItem.onClick(p, click);
+                                        } else {
+                                            onClickUnowned(p, click);
                                         }
                                     } else {
                                         p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK,
