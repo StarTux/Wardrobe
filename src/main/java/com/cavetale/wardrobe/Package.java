@@ -27,6 +27,7 @@ public enum Package {
     PUMPKIN(Hat.PUMPKIN_STUB),
     SANTA(Hat.SANTA_HAT,
           Costume.SANTA_POLAR_BEAR),
+    CHRISTMAS_HAT(Hat.CHRISTMAS_HAT),
     STRAW_HAT(Hat.STRAW_HAT),
     WITCH_HAT(text("Witch Hat", LIGHT_PURPLE),
               Hat.PURPLE_WITCH_HAT,
