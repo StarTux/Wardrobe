@@ -1,5 +1,6 @@
 package com.cavetale.wardrobe;
 
+import com.cavetale.wardrobe.mount.Ride;
 import com.cavetale.wardrobe.sql.SQLPackage;
 import com.cavetale.wardrobe.util.Gui;
 import com.winthier.sql.SQLDatabase;
@@ -37,12 +38,17 @@ public final class WardrobePlugin extends JavaPlugin {
             removeAll(player);
         }
         Gui.disable(this);
+        Ride.cancelAll();
     }
 
-    void removeAll(Player player) {
+    protected void removeAll(Player player) {
         Costume.remove(player);
         Hat.remove(player);
         Handheld.remove(player, false);
         Handheld.remove(player, true);
+    }
+
+    public static WardrobePlugin plugin() {
+        return instance;
     }
 }

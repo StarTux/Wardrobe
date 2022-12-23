@@ -33,6 +33,7 @@ public interface WardrobeItem {
         list.addAll(List.of(Hat.values()));
         list.addAll(List.of(Handheld.values()));
         list.addAll(List.of(Costume.values()));
+        list.addAll(List.of(Mount.values()));
         return list;
     }
 

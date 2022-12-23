@@ -1,5 +1,6 @@
 package com.cavetale.wardrobe;
 
+import com.cavetale.wardrobe.mount.Ride;
 import com.cavetale.wardrobe.util.Gui;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
@@ -11,8 +12,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -102,5 +105,20 @@ public final class EventListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     void onPlayerQuit(PlayerQuitEvent event) {
         plugin.removeAll(event.getPlayer());
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    private void onEntityDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player player) {
+            Ride ride = Ride.of(player);
+            if (ride != null) ride.onEntityDamage(player, event);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = false)
+    private void onPlayerInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        Ride ride = Ride.of(player);
+        if (ride != null) ride.onPlayerInteract(player, event);
     }
 }

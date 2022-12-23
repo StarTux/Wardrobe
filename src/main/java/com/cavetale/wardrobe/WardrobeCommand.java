@@ -6,7 +6,6 @@ import com.cavetale.wardrobe.util.Gui;
 import com.cavetale.wardrobe.util.Items;
 import com.winthier.playercache.PlayerCache;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
@@ -16,10 +15,8 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.title.Title;
@@ -34,12 +31,17 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import static net.kyori.adventure.text.Component.newline;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.textOfChildren;
+import static net.kyori.adventure.text.format.NamedTextColor.*;
+import static net.kyori.adventure.text.format.TextColor.color;
 
 @RequiredArgsConstructor
 public final class WardrobeCommand implements TabExecutor {
     private final WardrobePlugin plugin;
-    public static final TextColor BG = TextColor.color(0x8080D0);
-    public static final TextColor COLOR = TextColor.color(0xD08080);
+    public static final TextColor BG = color(0x8080D0);
+    public static final TextColor COLOR = color(0xD08080);
     private final List<MenuButton> menuButtonList = new ArrayList<>();
 
     @Value
@@ -77,7 +79,7 @@ public final class WardrobeCommand implements TabExecutor {
             Player target = Bukkit.getPlayer(uuid);
             if (target != null) {
                 target.showTitle(Title.title(pack.displayName,
-                                             Component.text("Wardrobe Unlocked!", NamedTextColor.GREEN)));
+                                             text("Wardrobe Unlocked!", GREEN)));
                 target.playSound(target.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE,
                                  SoundCategory.MASTER, 0.5f, 1.5f);
             }
@@ -113,21 +115,19 @@ public final class WardrobeCommand implements TabExecutor {
     }
 
     protected void openGui(Player player, GuiContext context) {
-        final int size = 3 * 9;
+        final int size = 4 * 9;
         Component title = context.selectedPackage != null
             ? (GuiOverlay.builder(size) // Package
-               .layer(GuiOverlay.BLANK, TextColor.color(0x302010))
-               .layer(GuiOverlay.TOP_BAR, TextColor.color(0x404050))
-               .title(Component.join(JoinConfiguration.noSeparators(),
-                                     context.selectedPackage.displayName,
-                                     Component.text(" - Package", COLOR)))
+               .layer(GuiOverlay.BLANK, color(0x302010))
+               .layer(GuiOverlay.TOP_BAR, color(0x404050))
+               .title(textOfChildren(context.selectedPackage.displayName,
+                                     text(" - Package", COLOR)))
                .build())
             : (GuiOverlay.builder(size) // Category
                .layer(GuiOverlay.BLANK, COLOR)
                .layer(GuiOverlay.TOP_BAR, BG)
-               .title(Component.join(JoinConfiguration.noSeparators(),
-                                     context.selectedCategory.displayName,
-                                     Component.text(" - Wardrobe", COLOR)))
+               .title(textOfChildren(context.selectedCategory.displayName,
+                                     text(" - Wardrobe", COLOR)))
                .build());
         Gui gui = new Gui(plugin).title(title).size(size);
         context.gui = gui;
@@ -137,7 +137,7 @@ public final class WardrobeCommand implements TabExecutor {
                 gui.setItem(topBarIndex++,
                             Items.text(menuButton.category.icon,
                                        List.of(menuButton.category.displayName,
-                                               Component.text("Category", NamedTextColor.DARK_GRAY))),
+                                               text("Category", DARK_GRAY))),
                             (p, click) -> {
                                 if (click.getClick() != ClickType.LEFT) return;
                                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK,
@@ -173,10 +173,10 @@ public final class WardrobeCommand implements TabExecutor {
             context.gui.setItem(index,
                                 Items.text(firstItem.toMenuItem(),
                                            List.of(pack.displayName,
-                                                   Component.text("Package", NamedTextColor.DARK_GRAY),
+                                                   text("Package", DARK_GRAY),
                                                    (context.unlockedPackages.contains(pack)
-                                                    ? Component.text("Unlocked", NamedTextColor.GREEN)
-                                                    : Component.text("Locked", NamedTextColor.RED)))),
+                                                    ? text("Unlocked", GREEN)
+                                                    : text("Locked", RED)))),
                                 (p, click) -> {
                                     if (click.getClick() != ClickType.LEFT) return;
                                     if (pack.wardrobeItems.size() == 1) {
@@ -223,9 +223,9 @@ public final class WardrobeCommand implements TabExecutor {
 
     protected ItemStack unowned(ItemStack in) {
         ItemMeta meta = in.getItemMeta();
-        meta.lore(List.of(Component.text("Purchase this item at ").color(COLOR)
+        meta.lore(List.of(text("Purchase this item at ").color(COLOR)
                           .decoration(TextDecoration.ITALIC, false),
-                          Component.text("store.cavetale.com").color(COLOR)
+                          text("store.cavetale.com").color(COLOR)
                           .decorate(TextDecoration.UNDERLINED).decoration(TextDecoration.ITALIC, false)));
         in.setItemMeta(meta);
         return in;
@@ -234,20 +234,20 @@ public final class WardrobeCommand implements TabExecutor {
     protected void onClickUnowned(Player player, InventoryClickEvent event) {
         if (event.getClick() != ClickType.LEFT) return;
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
-        Component url = Component.text("store.cavetale.com/wardrobe", COLOR, TextDecoration.UNDERLINED);
-        player.sendMessage(Component.text()
-                           .append(Component.newline())
-                           .append(Component.text("Purchase this item at ", COLOR))
+        Component url = text("store.cavetale.com/wardrobe", COLOR, TextDecoration.UNDERLINED);
+        player.sendMessage(text()
+                           .append(newline())
+                           .append(text("Purchase this item at ", COLOR))
                            .append(url)
                            .clickEvent(ClickEvent.openUrl("https://store.cavetale.com/category/wardrobe"))
                            .hoverEvent(HoverEvent.showText(url))
-                           .append(Component.newline())
+                           .append(newline())
                            .build());
     }
 
     @Override
     public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias, final String[] args) {
-        return Collections.emptyList();
+        return List.of();
     }
 
     protected static final class GuiContext {

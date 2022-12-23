@@ -4,19 +4,20 @@ import com.cavetale.mytems.Mytems;
 import java.util.ArrayList;
 import java.util.List;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.inventory.ItemStack;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 /*
  * All the categories displayed in the menu.
  */
 public enum Category {
-    ALL(Component.text("All", NamedTextColor.LIGHT_PURPLE), Mytems.EARTH),
-    UNLOCKED(Component.text("Unlocked", NamedTextColor.GOLD), Mytems.GOLDEN_KEY),
-    SWORDS(Component.text("Swords", NamedTextColor.RED),
+    ALL(text("All", LIGHT_PURPLE), Mytems.EARTH),
+    UNLOCKED(text("Unlocked", GOLD), Mytems.GOLDEN_KEY),
+    SWORDS(text("Swords", RED),
            Package.RED_LIGHTSABER,
            Package.BLUE_LIGHTSABER),
-    HATS(Component.text("Hats", NamedTextColor.GRAY),
+    HATS(text("Hats", GRAY),
          Package.CHRISTMAS_HAT,
          Package.SANTA,
          Package.TOP_HAT,
@@ -26,16 +27,18 @@ public enum Category {
          Package.COWBOY_HAT,
          Package.FIREFIGHTER_HELMET,
          Package.STRAW_HAT),
-    MASKS(Component.text("Masks", NamedTextColor.GOLD),
-             Package.KOBOLD,
-             Package.PLAGUE_DOCTOR),
-    ACCESSORIES(Component.text("Accessories", BlockColor.PINK.textColor),
+    MASKS(text("Masks", GOLD),
+          Package.KOBOLD,
+          Package.PLAGUE_DOCTOR),
+    ACCESSORIES(text("Accessories", BlockColor.PINK.textColor),
                 Package.SUNGLASSES,
                 Package.CAT_EARS,
                 Package.WHITE_BUNNY,
                 Package.PUMPKIN,
                 Package.ANGEL,
                 Package.DEVIL),
+    MOUNTS(text("Mounts", AQUA),
+           Package.SANTA_SLED),
     ;
 
     public final Component displayName;
