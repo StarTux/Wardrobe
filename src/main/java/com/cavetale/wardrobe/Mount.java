@@ -17,12 +17,13 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 import static net.kyori.adventure.text.format.TextColor.color;
 
 @Getter
 public enum Mount implements WardrobeItem {
-    SANTA_SLED(text("Santa's Sleigh", WHITE), Mytems.SANTA_SLED, () -> new ArmorStandMount(0.5)),
+    SANTA_SLED(text("Santa's Sleigh", RED), Mytems.SANTA_SLED, () -> new ArmorStandMount(0.5)),
     ;
 
     public final Component displayName;
@@ -40,8 +41,10 @@ public enum Mount implements WardrobeItem {
         MountResult result = adapter.mount(player, this);
         if (result != MountResult.SUCCESS) {
             player.sendActionBar(text(result.message, RED));
+            player.sendMessage(text(result.message, RED));
             return false;
         } else {
+            player.sendMessage(textOfChildren(text("Mounted: ", WardrobeCommand.COLOR), displayName));
             player.playSound(player.getLocation(), Sound.ENTITY_HORSE_SADDLE, SoundCategory.MASTER, 1.0f, 1.125f);
             return true;
         }
@@ -88,17 +91,9 @@ public enum Mount implements WardrobeItem {
         if (event.getClick() != ClickType.LEFT) return;
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
         if (this == remove(player)) {
-            player.sendMessage(text("Mount removed: ").color(WardrobeCommand.COLOR)
-                               .append(displayName));
+            player.sendMessage(textOfChildren(text("Mount removed: ", WardrobeCommand.COLOR), displayName));
             return;
         }
-        if (mount(player)) {
-            player.sendMessage(text("Mount equipped: ").color(WardrobeCommand.COLOR)
-                               .append(displayName));
-        } else {
-            player.sendMessage(text("Cannot equip ").color(color(0xFF0000))
-                               .append(displayName)
-                               .append(text(": Inventory is full!").color(color(0xFF0000))));
-        }
+        mount(player);
     }
 }
