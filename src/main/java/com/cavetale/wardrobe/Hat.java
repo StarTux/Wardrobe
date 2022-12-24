@@ -30,7 +30,7 @@ public enum Hat implements WardrobeItem {
     PUMPKIN_STUB(Component.text("Pumpkin Stub", NamedTextColor.GOLD), Mytems.PUMPKIN_STUB),
     SANTA_HAT(Component.text("Santa Hat", NamedTextColor.RED), Mytems.STOCKING_CAP),
     STRAW_HAT(Component.text("Straw Hat", NamedTextColor.YELLOW), Mytems.STRAW_HAT),
-    CHRISTMAS_HAT(Component.text("Christmas Hat", NamedTextColor.RED), Mytems.CHRISTMAS_HAT),
+    CHRISTMAS_HAT(Component.text("Christmas Wizard Hat", NamedTextColor.RED), Mytems.CHRISTMAS_HAT),
     // Witch Hat
     WHITE_WITCH_HAT(Component.text("White Witch Hat", BlockColor.WHITE.textColor), Mytems.WHITE_WITCH_HAT),
     ORANGE_WITCH_HAT(Component.text("Orange Witch Hat", BlockColor.ORANGE.textColor), Mytems.ORANGE_WITCH_HAT),
