@@ -3,12 +3,16 @@ package com.cavetale.wardrobe.mount;
 import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.wardrobe.Mount;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 import static com.cavetale.wardrobe.WardrobePlugin.plugin;
 import static net.kyori.adventure.text.Component.text;
@@ -23,6 +27,7 @@ public final class ArmorStandMountRide extends Ride {
     private int y;
     private int z;
     private boolean flying;
+    private static final Map<UUID, ArmorStandMountRide> ARMOR_STANDS = new HashMap<>();
 
     public ArmorStandMountRide(final Player player, final ArmorStand armorStand, final ArmorStandMount adapter, final Mount mount) {
         super(player.getUniqueId(), mount);
@@ -31,8 +36,13 @@ public final class ArmorStandMountRide extends Ride {
         this.adapter = adapter;
     }
 
+    public static ArmorStandMountRide of(ArmorStand as) {
+        return ARMOR_STANDS.get(as.getUniqueId());
+    }
+
     @Override
     protected void onEnable() {
+        ARMOR_STANDS.put(armorStand.getUniqueId(), this);
         Bukkit.getScheduler().runTaskLater(plugin(), () -> {
                 player.sendActionBar(textOfChildren(Mytems.MOUSE_LEFT, text(" Start or stop flying", AQUA)));
                 player.sendMessage(textOfChildren(Mytems.MOUSE_LEFT, text(" Start or stop flying", AQUA)));
@@ -41,6 +51,7 @@ public final class ArmorStandMountRide extends Ride {
 
     @Override
     protected void onCancel() {
+        ARMOR_STANDS.remove(armorStand.getUniqueId());
         armorStand.remove();
     }
 
@@ -93,5 +104,12 @@ public final class ArmorStandMountRide extends Ride {
             armorStand.setCanMove(true);
             armorStand.setCanTick(true);
         }
+    }
+
+    /**
+     * When this very armor stand takes damage.
+     */
+    public void onArmorStandDamage(ArmorStand theArmorStand, EntityDamageEvent event) {
+        event.setCancelled(true);
     }
 }

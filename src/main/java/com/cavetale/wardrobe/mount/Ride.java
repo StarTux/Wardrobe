@@ -16,9 +16,10 @@ import static com.cavetale.wardrobe.WardrobePlugin.plugin;
 
 @RequiredArgsConstructor
 public abstract class Ride {
-    protected final UUID uuid;
+    protected final UUID uuid; // player uuid
     protected final Mount mount;
     private BukkitTask task;
+    /** Map player UUID to ride. */
     protected static final Map<UUID, Ride> RIDES = new HashMap<>();
 
     protected final void enable() {
@@ -55,7 +56,7 @@ public abstract class Ride {
 
     protected abstract void onLeftClick();
 
-    public final void onEntityDamage(Player player, EntityDamageEvent event) {
+    public final void onPlayerDamage(Player player, EntityDamageEvent event) {
         switch (event.getCause()) {
         case FALL:
         case SUFFOCATION:

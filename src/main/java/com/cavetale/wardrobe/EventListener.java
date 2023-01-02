@@ -1,5 +1,6 @@
 package com.cavetale.wardrobe;
 
+import com.cavetale.wardrobe.mount.ArmorStandMountRide;
 import com.cavetale.wardrobe.mount.Ride;
 import com.cavetale.wardrobe.util.Gui;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -111,7 +113,10 @@ public final class EventListener implements Listener {
     private void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player player) {
             Ride ride = Ride.of(player);
-            if (ride != null) ride.onEntityDamage(player, event);
+            if (ride != null) ride.onPlayerDamage(player, event);
+        } else if (event.getEntity() instanceof ArmorStand armorStand) {
+            ArmorStandMountRide ride = ArmorStandMountRide.of(armorStand);
+            if (ride != null) ride.onArmorStandDamage(armorStand, event);
         }
     }
 
