@@ -87,6 +87,11 @@ public enum Hat implements WardrobeItem {
         this.mytems = mytems;
     }
 
+    @Override
+    public Category getCategory() {
+        return Category.HAT;
+    }
+
     /**
      * Attempt to empty the player helmet slot and put this hat
      * instead. It is recommended to call remove(Player) first.
@@ -178,5 +183,10 @@ public enum Hat implements WardrobeItem {
                                .append(displayName)
                                .append(Component.text(": Inventory is full!").color(TextColor.color(0xFF0000))));
         }
+    }
+
+    @Override
+    public boolean isWearing(Player player) {
+        return of(player) == this;
     }
 }

@@ -95,6 +95,11 @@ public enum Costume implements WardrobeItem {
         }
     }
 
+    @Override
+    public Category getCategory() {
+        return null;
+    }
+
     public void wear(Player player) {
         if (!backups.containsKey(player.getUniqueId())) {
             backups.put(player.getUniqueId(), player.getPlayerProfile());
@@ -147,5 +152,10 @@ public enum Costume implements WardrobeItem {
         wear(player);
         player.sendMessage(Component.text("Costume equipped: ").color(WardrobeCommand.COLOR)
                            .append(displayName));
+    }
+
+    @Override
+    public boolean isWearing(Player player) {
+        return false;
     }
 }

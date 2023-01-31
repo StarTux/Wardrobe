@@ -42,6 +42,11 @@ public enum Mount implements WardrobeItem {
         this.iconSupplier = iconSupplier;
     }
 
+    @Override
+    public Category getCategory() {
+        return Category.MOUNT;
+    }
+
     public boolean mount(Player player) {
         remove(player);
         MountResult result = adapter.mount(player, this);
@@ -94,5 +99,10 @@ public enum Mount implements WardrobeItem {
             return;
         }
         mount(player);
+    }
+
+    @Override
+    public boolean isWearing(Player player) {
+        return of(player) == this;
     }
 }

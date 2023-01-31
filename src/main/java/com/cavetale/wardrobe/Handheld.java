@@ -28,6 +28,11 @@ public enum Handheld implements WardrobeItem {
         this.mytems = mytems;
     }
 
+    @Override
+    public Category getCategory() {
+        return Category.HANDHELD;
+    }
+
     /**
      * @true if successful, false otherwise.
      */
@@ -132,5 +137,11 @@ public enum Handheld implements WardrobeItem {
                                .append(displayName)
                                .append(Component.text(": Hand is full!").color(TextColor.color(0xFF0000))));
         }
+    }
+
+    @Override
+    public boolean isWearing(Player player) {
+        return of(player, false) == this
+            || of(player, true) == this;
     }
 }

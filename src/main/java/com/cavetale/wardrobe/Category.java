@@ -3,65 +3,38 @@ package com.cavetale.wardrobe;
 import com.cavetale.mytems.Mytems;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
 import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 
+@RequiredArgsConstructor
 /*
  * All the categories displayed in the menu.
  */
 public enum Category {
-    ALL(text("All", LIGHT_PURPLE), Mytems.EARTH),
-    UNLOCKED(text("Unlocked", GOLD), Mytems.GOLDEN_KEY),
-    SWORDS(text("Swords", RED),
-           Package.RED_LIGHTSABER,
-           Package.BLUE_LIGHTSABER),
-    HATS(text("Hats", GRAY),
-         Package.CHRISTMAS_HAT,
-         Package.SANTA,
-         Package.TOP_HAT,
-         Package.WITCH_HAT,
-         Package.ELF_HAT,
-         Package.PIRATE_HAT,
-         Package.COWBOY_HAT,
-         Package.FIREFIGHTER_HELMET,
-         Package.STRAW_HAT),
-    MASKS(text("Masks", GOLD),
-          Package.KOBOLD,
-          Package.PLAGUE_DOCTOR),
-    ACCESSORIES(text("Accessories", BlockColor.PINK.textColor),
-                Package.SUNGLASSES,
-                Package.CAT_EARS,
-                Package.WHITE_BUNNY,
-                Package.PUMPKIN,
-                Package.ANGEL,
-                Package.DEVIL),
-    MOUNTS(text("Mounts", AQUA),
-           Package.SANTA_SLED,
-           Package.DRAGON_MOUNT),
+    ALL(2, textOfChildren(Mytems.EARTH, text(" All Wardrobe Items", LIGHT_PURPLE)), Mytems.EARTH),
+    UNLOCKED(3, textOfChildren(Mytems.CHECKED_CHECKBOX, text(" Your Wardrobe Items", GOLD)), Mytems.CHECKED_CHECKBOX),
+    HAT(4, text("Hats", AQUA), Mytems.PIRATE_HAT),
+    HANDHELD(5, text("Handheld", AQUA), Mytems.RED_LIGHTSABER),
+    MOUNT(6, text("Mounts", AQUA), Mytems.SANTA_SLED),
     ;
 
+    public final int guiIndex;
     public final Component displayName;
-    public final List<Package> packages;
-    public final List<WardrobeItem> wardrobeItems;
-    public final ItemStack icon;
+    public final Mytems mytems;
 
-    Category(final Component displayName, final Package... packages) {
-        this.displayName = displayName;
-        this.packages = List.of(packages);
-        List<WardrobeItem> items = new ArrayList<>();
-        for (Package pack : packages) {
-            items.addAll(pack.wardrobeItems);
-        }
-        this.wardrobeItems = List.copyOf(items);
-        this.icon = wardrobeItems.get(0).toMenuItem();
+    public ItemStack createIcon() {
+        return mytems.createIcon(List.of(displayName));
     }
 
-    Category(final Component displayName, final Mytems mytems) {
-        this.displayName = displayName;
-        this.packages = List.of(Package.values());
-        this.wardrobeItems = WardrobeItem.all();
-        this.icon = mytems.createIcon(List.of(displayName));
+    public List<WardrobeItem> getItems() {
+        List<WardrobeItem> result = new ArrayList<>();
+        for (WardrobeItem it : WardrobeItem.all()) {
+            if (it.getCategory() == this) result.add(it);
+        }
+        return result;
     }
 }
