@@ -3,46 +3,45 @@ package com.cavetale.wardrobe.mount;
 import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.wardrobe.Mount;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 import static com.cavetale.wardrobe.WardrobePlugin.plugin;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 
-public final class ArmorStandMountRide extends Ride {
+public final class ArmorStandRide extends Ride {
     private final Player player;
     private final ArmorStand armorStand;
-    private final ArmorStandMount adapter;
+    private final ArmorStandMountAdapter adapter;
     private int x;
     private int y;
     private int z;
     private boolean flying;
-    private static final Map<UUID, ArmorStandMountRide> ARMOR_STANDS = new HashMap<>();
 
-    public ArmorStandMountRide(final Player player, final ArmorStand armorStand, final ArmorStandMount adapter, final Mount mount) {
+    public ArmorStandRide(final Player player, final ArmorStand armorStand, final ArmorStandMountAdapter adapter, final Mount mount) {
         super(player.getUniqueId(), mount);
         this.player = player;
         this.armorStand = armorStand;
         this.adapter = adapter;
     }
 
-    public static ArmorStandMountRide of(ArmorStand as) {
-        return ARMOR_STANDS.get(as.getUniqueId());
+    public static ArmorStandRide of(ArmorStand as) {
+        if (ENTITY_MAP.get(as.getUniqueId()) instanceof ArmorStandRide ride) {
+            return ride;
+        } else {
+            return null;
+        }
     }
 
     @Override
     protected void onEnable() {
-        ARMOR_STANDS.put(armorStand.getUniqueId(), this);
+        ENTITY_MAP.put(armorStand.getUniqueId(), this);
         Bukkit.getScheduler().runTaskLater(plugin(), () -> {
                 player.sendActionBar(textOfChildren(Mytems.MOUSE_LEFT, text(" Start or stop flying", AQUA)));
                 player.sendMessage(textOfChildren(Mytems.MOUSE_LEFT, text(" Start or stop flying", AQUA)));
@@ -51,13 +50,14 @@ public final class ArmorStandMountRide extends Ride {
 
     @Override
     protected void onCancel() {
-        ARMOR_STANDS.remove(armorStand.getUniqueId());
+        ENTITY_MAP.remove(armorStand.getUniqueId());
         armorStand.remove();
     }
 
     @Override
     protected void tick() {
-        if (armorStand.isDead() || !player.isOnline() || !player.isValid() || !armorStand.equals(player.getVehicle())) {
+        if (armorStand.isDead() || !player.isOnline() || !player.isValid()
+            || !armorStand.equals(player.getVehicle()) || armorStand.getLocation().getY() > 255.0) {
             cancel();
             return;
         }
@@ -85,6 +85,15 @@ public final class ArmorStandMountRide extends Ride {
 
     @Override
     protected void onLeftClick() {
+        click();
+    }
+
+    @Override
+    protected void onRightClick() {
+        click();
+    }
+
+    private void click() {
         setFlying(!flying);
         if (flying) {
             player.getWorld().playSound(player.getLocation(), Sound.UI_LOOM_TAKE_RESULT, SoundCategory.MASTER, 1.0f, 1.5f);
@@ -104,12 +113,5 @@ public final class ArmorStandMountRide extends Ride {
             armorStand.setCanMove(true);
             armorStand.setCanTick(true);
         }
-    }
-
-    /**
-     * When this very armor stand takes damage.
-     */
-    public void onArmorStandDamage(ArmorStand theArmorStand, EntityDamageEvent event) {
-        event.setCancelled(true);
     }
 }

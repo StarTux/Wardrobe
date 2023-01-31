@@ -1,20 +1,23 @@
 package com.cavetale.wardrobe;
 
 import com.cavetale.mytems.Mytems;
-import com.cavetale.wardrobe.mount.ArmorStandMount;
+import com.cavetale.wardrobe.mount.ArmorStandMountAdapter;
+import com.cavetale.wardrobe.mount.DragonMountAdapter;
 import com.cavetale.wardrobe.mount.MountAdapter;
 import com.cavetale.wardrobe.mount.MountResult;
+import com.cavetale.wardrobe.mount.Ride;
 import com.cavetale.wardrobe.util.Items;
 import java.util.List;
 import java.util.function.Supplier;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
@@ -23,17 +26,20 @@ import static net.kyori.adventure.text.format.TextColor.color;
 
 @Getter
 public enum Mount implements WardrobeItem {
-    SANTA_SLED(text("Santa's Sleigh", RED), Mytems.SANTA_SLED, () -> new ArmorStandMount(0.5)),
+    SANTA_SLED(text("Santa's Sleigh", RED),
+               () -> new ArmorStandMountAdapter(Mytems.SANTA_SLED, 0.5),
+               Mytems.SANTA_SLED::createIcon),
+    DRAGON(text("Dragon", LIGHT_PURPLE), DragonMountAdapter::new, () -> new ItemStack(Material.DRAGON_HEAD)),
     ;
 
     public final Component displayName;
-    public final Mytems mytems;
     private final MountAdapter adapter;
+    private final Supplier<ItemStack> iconSupplier;
 
-    Mount(final Component displayName, final Mytems mytems, final Supplier<MountAdapter> adapterCtor) {
+    Mount(final Component displayName, final Supplier<MountAdapter> adapterCtor, final Supplier<ItemStack> iconSupplier) {
         this.displayName = displayName;
-        this.mytems = mytems;
         this.adapter = adapterCtor.get();
+        this.iconSupplier = iconSupplier;
     }
 
     public boolean mount(Player player) {
@@ -62,23 +68,16 @@ public enum Mount implements WardrobeItem {
     }
 
     public static Mount of(Player player) {
-        if (player.isInsideVehicle() && player.getVehicle() instanceof ArmorStand armorStand) {
-            Mytems mytems = Mytems.forItem(armorStand.getEquipment().getHelmet());
-            if (mytems != null) {
-                for (Mount mount : Mount.values()) {
-                    if (mount.mytems == mytems && mount.adapter instanceof ArmorStandMount) {
-                        return mount;
-                    }
-                }
-            }
-        }
-        return null;
+        Ride ride = Ride.ofPlayer(player);
+        if (ride == null) return null;
+        return ride.getMount();
     }
 
     @Override
     public ItemStack toMenuItem() {
-        ItemStack itemStack = mytems.getMytem().createItemStack();
+        ItemStack itemStack = iconSupplier.get();
         itemStack.editMeta(meta -> {
+                meta.addItemFlags(ItemFlag.values());
                 Items.text(meta, List.of(displayName,
                                          text("Mount", DARK_PURPLE),
                                          text("Click to mount", color(0xFFFF00))));

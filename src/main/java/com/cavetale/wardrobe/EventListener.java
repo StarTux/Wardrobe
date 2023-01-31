@@ -1,20 +1,23 @@
 package com.cavetale.wardrobe;
 
-import com.cavetale.wardrobe.mount.ArmorStandMountRide;
+import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
 import com.cavetale.wardrobe.mount.Ride;
 import com.cavetale.wardrobe.util.Gui;
+import io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -112,18 +115,53 @@ public final class EventListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     private void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player player) {
-            Ride ride = Ride.of(player);
+            Ride ride = Ride.ofPlayer(player);
             if (ride != null) ride.onPlayerDamage(player, event);
-        } else if (event.getEntity() instanceof ArmorStand armorStand) {
-            ArmorStandMountRide ride = ArmorStandMountRide.of(armorStand);
-            if (ride != null) ride.onArmorStandDamage(armorStand, event);
+        } else if (Ride.ofEntity(event.getEntity()) != null) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    private void onEntityChangeBlock(EntityChangeBlockEvent event) {
+        if (Ride.ofEntity(event.getEntity()) != null) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    private void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (Ride.ofEntity(event.getDamager()) != null) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    private void onEntityPushedByEntityAttack(EntityPushedByEntityAttackEvent event) {
+        if (Ride.ofEntity(event.getPushedBy()) != null) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    private void onEntityExplode(EntityExplodeEvent event) {
+        if (Ride.ofEntity(event.getEntity()) != null) {
+            event.setCancelled(true);
+            event.blockList().clear();
+        }
+    }
+
+    @EventHandler
+    private void onPlayerEntityAbility(PlayerEntityAbilityQuery query) {
+        if (Ride.ofEntity(query.getEntity()) != null) {
+            query.setCancelled(true);
         }
     }
 
     @EventHandler(ignoreCancelled = false)
     private void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        Ride ride = Ride.of(player);
+        Ride ride = Ride.ofPlayer(player);
         if (ride != null) ride.onPlayerInteract(player, event);
     }
 }

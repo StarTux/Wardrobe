@@ -38,7 +38,8 @@ public enum Category {
                 Package.ANGEL,
                 Package.DEVIL),
     MOUNTS(text("Mounts", AQUA),
-           Package.SANTA_SLED),
+           Package.SANTA_SLED,
+           Package.DRAGON_MOUNT),
     ;
 
     public final Component displayName;
