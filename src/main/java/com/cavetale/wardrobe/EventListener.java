@@ -4,6 +4,7 @@ import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
 import com.cavetale.wardrobe.mount.Ride;
 import com.cavetale.wardrobe.util.Gui;
 import io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -21,6 +22,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -122,16 +124,41 @@ public final class EventListener implements Listener {
         }
     }
 
+    private UUID thornsId;
+
     @EventHandler(priority = EventPriority.LOWEST)
-    private void onEntityChangeBlock(EntityChangeBlockEvent event) {
+    private void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (Ride.ofEntity(event.getDamager()) != null) {
+            event.setCancelled(true);
+        }
         if (Ride.ofEntity(event.getEntity()) != null) {
+            event.setCancelled(true);
+            if (event.getCause() == EntityDamageEvent.DamageCause.THORNS) {
+                UUID uuid = event.getDamager().getUniqueId();
+                thornsId = uuid;
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                        if (uuid.equals(thornsId)) thornsId = null;
+                    });
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    /**
+     * Thorns damage is still applied to player items even if the
+     * damage event has been cancelled.  Therefore we remember the
+     * last player who dealt damage to the dragon via thorns (see
+     * above) and cancel it here.
+     */
+    private void onPlayerItemDamage(PlayerItemDamageEvent event) {
+        if (thornsId != null && event.getPlayer().getUniqueId().equals(thornsId)) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    private void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (Ride.ofEntity(event.getDamager()) != null) {
+    private void onEntityChangeBlock(EntityChangeBlockEvent event) {
+        if (Ride.ofEntity(event.getEntity()) != null) {
             event.setCancelled(true);
         }
     }
