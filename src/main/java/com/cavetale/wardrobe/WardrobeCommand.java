@@ -149,7 +149,7 @@ public final class WardrobeCommand implements TabExecutor {
         final int pageSize = 5 * 9;
         final int pageCount = (itemList.size() - 1) / pageSize + 1;
         builder.title(textOfChildren(context.selectedCategory.displayName,
-                                     text((context.page + 1) + "/" + pageCount)));
+                                     text(" " + (context.page + 1) + "/" + pageCount)));
         final int listOffset = context.page * pageSize;
         for (int i = 0; i < pageSize; i += 1) {
             final int guiIndex = i + 9;
