@@ -85,6 +85,10 @@ public final class WardrobeCommand implements TabExecutor {
             }
             return true;
         }
+        if (args.length == 1 && sender instanceof Player player && args[0].equals("click")) {
+            click(player);
+            return true;
+        }
         if (!(sender instanceof Player)) {
             sender.sendMessage("[wardrobe:wardrobe] player expected");
             return true;
@@ -232,5 +236,31 @@ public final class WardrobeCommand implements TabExecutor {
         int page;
         Set<Package> unlockedPackages = EnumSet.noneOf(Package.class);
         Set<WardrobeItem> unlockedItems = new HashSet<>();
+    }
+
+    private void click(Player player) {
+        final int size = 5 * 9;
+        GuiOverlay.Builder builder = GuiOverlay.BLANK.builder(size, color(0xFFA3C3))
+            .layer(GuiOverlay.TITLE_BAR, BG)
+            .title(text("This heart beats for you", WHITE));
+        Gui gui = new Gui(plugin).size(size);
+        gui.setItem(4, 1, Mytems.HEART.createIcon(List.of(text("this heart beats for you", color(0xFFA3C3)))), (p, click) -> {
+                p.sendMessage(textOfChildren(newline(),
+                                             Mytems.MOUSE_LEFT,
+                                             text(" store.cavetale.com/category/shine", color(0xFFA3C3)),
+                                             newline())
+                              .clickEvent(openUrl("https://store.cavetale.com/category/shine"))
+                              .hoverEvent(showText(text("store.cavetale.com/category/shine", color(0xFFA3C3), UNDERLINED))));
+            });
+        gui.setItem(4, 3, Mytems.CUPID_WINGS.createIcon(List.of(text("these wings fly for you", color(0xFFA3C3)))), (p, click) -> {
+                p.sendMessage(textOfChildren(newline(),
+                                             Mytems.MOUSE_LEFT,
+                                             text(" store.cavetale.com/category/wardrobe", color(0xFFA3C3)),
+                                             newline())
+                              .clickEvent(openUrl("https://store.cavetale.com/category/wardrobe"))
+                              .hoverEvent(showText(text("store.cavetale.com/category/wardrobe", color(0xFFA3C3), UNDERLINED))));
+            });
+        gui.title(builder.build());
+        gui.open(player);
     }
 }

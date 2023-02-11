@@ -1,6 +1,8 @@
 package com.cavetale.wardrobe;
 
+import com.cavetale.core.connect.NetworkServer;
 import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
+import com.cavetale.mytems.Mytems;
 import com.cavetale.wardrobe.mount.Ride;
 import com.cavetale.wardrobe.util.Gui;
 import io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent;
@@ -23,9 +25,16 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import static net.kyori.adventure.text.Component.newline;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.textOfChildren;
+import static net.kyori.adventure.text.event.ClickEvent.runCommand;
+import static net.kyori.adventure.text.event.HoverEvent.showText;
+import static net.kyori.adventure.text.format.TextColor.color;
 
 @RequiredArgsConstructor
 public final class EventListener implements Listener {
@@ -190,5 +199,22 @@ public final class EventListener implements Listener {
         Player player = event.getPlayer();
         Ride ride = Ride.ofPlayer(player);
         if (ride != null) ride.onPlayerInteract(player, event);
+    }
+
+    @EventHandler
+    private void onPlayerJoin(PlayerJoinEvent event) {
+        if (!NetworkServer.HUB.isThisServer() && !NetworkServer.BETA.isThisServer()) return;
+        Player player = event.getPlayer();
+        if (!player.hasPermission("wardrobe.ad")) return;
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (!player.isOnline()) return;
+                player.sendMessage(textOfChildren(newline(),
+                                                  Mytems.MOUSE_LEFT,
+                                                  text(" Does your heart ", color(0xFFA3C3)),
+                                                  text("beat for someone?", color(0xFFA3C3)),
+                                                  newline())
+                                   .hoverEvent(showText(textOfChildren(Mytems.HEART, text(" This heart beats for you", color(0xFFA3C3)))))
+                                   .clickEvent(runCommand("/wardrobe click")));
+            }, 200L);
     }
 }

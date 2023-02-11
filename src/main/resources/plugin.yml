@@ -36,6 +36,10 @@ permissions:
     description: Wardrobe admin
     default: op
 
+  wardrobe.ad:
+    description: Receive an ad
+    default: false
+
   wardrobe.all:
     description: Unlock all skins
     default: false
