@@ -4,9 +4,8 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.wardrobe.util.Items;
 import java.util.List;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -14,19 +13,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.textOfChildren;
+import static net.kyori.adventure.text.format.NamedTextColor.*;
+import static net.kyori.adventure.text.format.TextColor.color;
 
-@Getter
+@Getter @RequiredArgsConstructor
 public enum Handheld implements WardrobeItem {
-    RED_LIGHTSABER(Component.text("Red Laser Sword", TextColor.color(0xff1d0b)), Mytems.RED_LIGHTSABER),
-    BLUE_LIGHTSABER(Component.text("Blue Laser Sword", TextColor.color(0xadf3f3)), Mytems.BLUE_LIGHTSABER);
+    RED_LIGHTSABER(text("Red Laser Sword", color(0xff1d0b)), Mytems.RED_LIGHTSABER, true),
+    BLUE_LIGHTSABER(text("Blue Laser Sword", color(0xadf3f3)), Mytems.BLUE_LIGHTSABER, true),
+    CUPID_WINGS(text("Cupid Wings", color(0xFFA3C3)), Mytems.CUPID_WINGS, false),
+    ;
 
     public final Component displayName;
     public final Mytems mytems;
-
-    Handheld(final Component displayName, final Mytems mytems) {
-        this.displayName = displayName;
-        this.mytems = mytems;
-    }
+    public final boolean mainHandAllowed;
 
     @Override
     public Category getCategory() {
@@ -108,34 +109,24 @@ public enum Handheld implements WardrobeItem {
 
     @Override
     public ItemStack toMenuItem() {
-        ItemStack itemStack = mytems.getMytem().createItemStack();
-        TextColor yellow = TextColor.color(0xFFFF00);
-        itemStack.editMeta(meta -> {
-                Items.text(meta, List.of(displayName,
-                                         Component.text("Hand Item", NamedTextColor.DARK_PURPLE),
-                                         Component.text("Left click to hold in main hand", yellow),
-                                         Component.text("Right click to hold in off hand", yellow)));
-            });
-        return itemStack;
+        return Items.text(mytems.createItemStack(), List.of(displayName));
     }
 
     @Override
     public void onClick(Player player, InventoryClickEvent event) {
         if (event.getClick() != ClickType.LEFT && event.getClick() != ClickType.RIGHT) return;
-        boolean offHand = event.isRightClick();
+        boolean offHand = !mainHandAllowed || event.isRightClick();
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
         if (this == remove(player, offHand)) {
-            player.sendMessage(Component.text("Handheld removed: ").color(WardrobeCommand.COLOR)
-                               .append(displayName));
+            player.sendMessage(textOfChildren(text("Handheld removed: ", WardrobeCommand.COLOR), displayName));
             return;
         }
         if (hold(player, offHand)) {
-            player.sendMessage(Component.text("Handheld equipped: ").color(WardrobeCommand.COLOR)
-                               .append(displayName));
+            player.sendMessage(textOfChildren(text("Handheld equipped: ", WardrobeCommand.COLOR), displayName));
         } else {
-            player.sendMessage(Component.text("Cannot equip ").color(TextColor.color(0xFF0000))
-                               .append(displayName)
-                               .append(Component.text(": Hand is full!").color(TextColor.color(0xFF0000))));
+            player.sendMessage(textOfChildren(text("Cannot equip ", color(0xFF0000)),
+                                              displayName,
+                                              text((offHand ? ": Hand is full!" : " Off-hand is full!"), color(0xFF0000))));
         }
     }
 

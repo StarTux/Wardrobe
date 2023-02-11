@@ -157,22 +157,29 @@ public final class WardrobeCommand implements TabExecutor {
             if (listIndex >= itemList.size()) break;
             final WardrobeItem wardrobeItem = itemList.get(listIndex);
             final boolean unlocked = context.unlockedItems.contains(wardrobeItem);
-            final ItemStack icon = unlocked
-                ? Items.text(wardrobeItem.toMenuItem(),
-                             List.of(wardrobeItem.getDisplayName(),
-                                     text("Wardrobe Item", DARK_GRAY),
-                                     textOfChildren(Mytems.CHECKED_CHECKBOX, text(" Unlocked", GREEN)),
-                                     empty(),
-                                     textOfChildren(Mytems.MOUSE_LEFT, text(" Equip", GRAY))))
-                : Items.text(wardrobeItem.toMenuItem(),
-                             List.of(wardrobeItem.getDisplayName(),
-                                     text("Wardrobe Item", DARK_GRAY),
-                                     textOfChildren(Mytems.CROSSED_CHECKBOX, text(" Locked", RED)),
-                                     empty(),
-                                     text("Purchase this item at ", GRAY),
-                                     textOfChildren(text("at ", GRAY), text("store.cavetale.com", BLUE, UNDERLINED))));
+            final ItemStack icon;
+            if (unlocked) {
+                List<Component> tooltip = new ArrayList<>();
+                tooltip.addAll(List.of(wardrobeItem.getDisplayName(),
+                                       text("Wardrobe Item", DARK_GRAY),
+                                       textOfChildren(Mytems.CHECKED_CHECKBOX, text(" Unlocked", GREEN)),
+                                       empty(),
+                                       textOfChildren(Mytems.MOUSE_LEFT, text(" Equip", GRAY))));
+                if (wardrobeItem instanceof Handheld handheld && handheld.isMainHandAllowed()) {
+                    tooltip.add(textOfChildren(Mytems.MOUSE_RIGHT, text(" Off-hand", GRAY)));
+                }
+                icon = Items.text(wardrobeItem.toMenuItem(), tooltip);
+            } else {
+                icon = Items.text(wardrobeItem.toMenuItem(),
+                                  List.of(wardrobeItem.getDisplayName(),
+                                          text("Wardrobe Item", DARK_GRAY),
+                                          textOfChildren(Mytems.CROSSED_CHECKBOX, text(" Locked", RED)),
+                                          empty(),
+                                          text("Purchase this item at ", GRAY),
+                                          textOfChildren(text("at ", GRAY), text("store.cavetale.com", BLUE, UNDERLINED))));
+            }
             gui.setItem(guiIndex, icon, (p, click) -> {
-                    if (!click.isLeftClick()) return;
+                    if (!click.isLeftClick() && !click.isRightClick()) return;
                     if (unlocked) {
                         wardrobeItem.onClick(p, click);
                         openGui(p, context);
