@@ -249,16 +249,16 @@ public final class WardrobeCommand implements TabExecutor {
                                              Mytems.MOUSE_LEFT,
                                              text(" store.cavetale.com/category/shine", color(0xFFA3C3)),
                                              newline())
-                              .clickEvent(openUrl("https://store.cavetale.com/category/shine"))
-                              .hoverEvent(showText(text("store.cavetale.com/category/shine", color(0xFFA3C3), UNDERLINED))));
+                              .clickEvent(openUrl("https://store.cavetale.com/category/valentine"))
+                              .hoverEvent(showText(text("store.cavetale.com/category/valentine", color(0xFFA3C3), UNDERLINED))));
             });
         gui.setItem(4, 3, Mytems.CUPID_WINGS.createIcon(List.of(text("these wings fly for you", color(0xFFA3C3)))), (p, click) -> {
                 p.sendMessage(textOfChildren(newline(),
                                              Mytems.MOUSE_LEFT,
-                                             text(" store.cavetale.com/category/wardrobe", color(0xFFA3C3)),
+                                             text(" store.cavetale.com/category/valentine", color(0xFFA3C3)),
                                              newline())
-                              .clickEvent(openUrl("https://store.cavetale.com/category/wardrobe"))
-                              .hoverEvent(showText(text("store.cavetale.com/category/wardrobe", color(0xFFA3C3), UNDERLINED))));
+                              .clickEvent(openUrl("https://store.cavetale.com/category/valentine"))
+                              .hoverEvent(showText(text("store.cavetale.com/category/valentine", color(0xFFA3C3), UNDERLINED))));
             });
         gui.title(builder.build());
         gui.open(player);
