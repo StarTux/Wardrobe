@@ -37,7 +37,7 @@ public final class FlagWardrobeItem implements WardrobeItem {
 
     public static FlagWardrobeItem of(ItemStack item) {
         Mytems mytems = Mytems.forItem(item);
-        if (mytems == null) return null;
+        if (mytems == null || mytems.category != MytemsCategory.FLAG) return null;
         for (Title title : TitlePlugin.getInstance().getTitles()) {
             if (title.getMytems() == mytems) {
                 return new FlagWardrobeItem(title, mytems);
