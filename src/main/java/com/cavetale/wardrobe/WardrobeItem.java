@@ -19,12 +19,16 @@ public interface WardrobeItem {
         if (hat != null) return hat;
         Handheld handheld = Handheld.of(itemStack);
         if (handheld != null) return handheld;
+        FlagWardrobeItem flag = FlagWardrobeItem.of(itemStack);
+        if (flag != null) return flag;
         return null;
     }
 
     Component getDisplayName();
 
     ItemStack toMenuItem();
+
+    List<Component> getMenuTooltip();
 
     void onClick(Player player, InventoryClickEvent event);
 
@@ -33,6 +37,7 @@ public interface WardrobeItem {
         list.addAll(List.of(Hat.values()));
         list.addAll(List.of(Handheld.values()));
         list.addAll(List.of(Mount.values()));
+        list.addAll(FlagWardrobeItem.values());
         return list;
     }
 

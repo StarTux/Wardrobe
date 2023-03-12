@@ -113,6 +113,9 @@ public final class WardrobeCommand implements TabExecutor {
                             context.unlockedPackages.add(pack);
                             context.unlockedItems.addAll(pack.wardrobeItems);
                         }
+                        for (FlagWardrobeItem it : FlagWardrobeItem.values()) {
+                            if (it.has(player)) context.unlockedItems.add(it);
+                        }
                         openGui(player, context);
                     });
         }
@@ -120,8 +123,7 @@ public final class WardrobeCommand implements TabExecutor {
 
     protected void openGui(Player player, GuiContext context) {
         final int size = 6 * 9;
-        GuiOverlay.Builder builder = GuiOverlay.BLANK.builder(size, COLOR) // Category
-            .layer(GuiOverlay.TOP_BAR, BG);
+        GuiOverlay.Builder builder = GuiOverlay.BLANK.builder(size, COLOR); // Category
         Gui gui = new Gui(plugin).size(size);
         int topBarIndex = 1;
         for (MenuButton menuButton : menuButtonList) {
@@ -139,17 +141,23 @@ public final class WardrobeCommand implements TabExecutor {
                                 openGui(p, context);
                             });
                 if (context.selectedCategory == menuButton.category) {
-                    builder.highlightSlot(menuButton.category.guiIndex, COLOR);
+                    builder.tab(menuButton.category.guiIndex, COLOR, BG);
                 }
             }
         }
         final List<WardrobeItem> itemList = switch (context.selectedCategory) {
         case ALL -> WardrobeItem.all();
-        case UNLOCKED -> new ArrayList<>(context.unlockedItems);
+        //case UNLOCKED -> new ArrayList<>(context.unlockedItems);
         default -> context.selectedCategory.getItems();
         };
-        Collections.sort(itemList, (a, b) -> Integer.compare(a.getCategory().ordinal() * 100 - a.ordinal(),
-                                                             b.getCategory().ordinal() * 100 - b.ordinal()));
+        Collections.sort(itemList, (a, b) -> {
+                boolean aa = context.unlockedItems.contains(a);
+                boolean bb = context.unlockedItems.contains(b);
+                if (aa && !bb) return -1;
+                if (bb && !aa) return 1;
+                return Integer.compare(a.getCategory().ordinal() * 100 - a.ordinal(),
+                                       b.getCategory().ordinal() * 100 - b.ordinal());
+            });
         final int pageSize = 5 * 9;
         final int pageCount = (itemList.size() - 1) / pageSize + 1;
         builder.title(textOfChildren(context.selectedCategory.displayName,
@@ -163,16 +171,7 @@ public final class WardrobeCommand implements TabExecutor {
             final boolean unlocked = context.unlockedItems.contains(wardrobeItem);
             final ItemStack icon;
             if (unlocked) {
-                List<Component> tooltip = new ArrayList<>();
-                tooltip.addAll(List.of(wardrobeItem.getDisplayName(),
-                                       text("Wardrobe Item", DARK_GRAY),
-                                       textOfChildren(Mytems.CHECKED_CHECKBOX, text(" Unlocked", GREEN)),
-                                       empty(),
-                                       textOfChildren(Mytems.MOUSE_LEFT, text(" Equip", GRAY))));
-                if (wardrobeItem instanceof Handheld handheld && handheld.isMainHandAllowed()) {
-                    tooltip.add(textOfChildren(Mytems.MOUSE_RIGHT, text(" Off-hand", GRAY)));
-                }
-                icon = Items.text(wardrobeItem.toMenuItem(), tooltip);
+                icon = Items.text(wardrobeItem.toMenuItem(), wardrobeItem.getMenuTooltip());
             } else {
                 icon = Items.text(wardrobeItem.toMenuItem(),
                                   List.of(wardrobeItem.getDisplayName(),

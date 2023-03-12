@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
@@ -110,6 +111,15 @@ public enum Handheld implements WardrobeItem {
     @Override
     public ItemStack toMenuItem() {
         return Items.text(mytems.createItemStack(), List.of(displayName));
+    }
+
+    @Override
+    public List<Component> getMenuTooltip() {
+        return List.of(getDisplayName(),
+                       text("Handheld", DARK_GRAY),
+                       empty(),
+                       textOfChildren(Mytems.MOUSE_LEFT, text(" Equip", GRAY)),
+                       textOfChildren(Mytems.MOUSE_RIGHT, text(" Off-hand", GRAY)));
     }
 
     @Override

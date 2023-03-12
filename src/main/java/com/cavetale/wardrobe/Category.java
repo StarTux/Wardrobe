@@ -16,9 +16,10 @@ import static net.kyori.adventure.text.format.NamedTextColor.*;
  */
 public enum Category {
     ALL(2, textOfChildren(Mytems.EARTH, text(" All Wardrobe Items", LIGHT_PURPLE)), Mytems.EARTH),
-    UNLOCKED(3, textOfChildren(Mytems.CHECKED_CHECKBOX, text(" Your Wardrobe Items", GOLD)), Mytems.CHECKED_CHECKBOX),
-    HAT(4, text("Hats", AQUA), Mytems.PIRATE_HAT),
-    HANDHELD(5, text("Handheld", AQUA), Mytems.RED_LIGHTSABER),
+    //UNLOCKED(2, textOfChildren(Mytems.CHECKED_CHECKBOX, text(" Your Wardrobe Items", GOLD)), Mytems.CHECKED_CHECKBOX),
+    HAT(3, text("Hats", AQUA), Mytems.PIRATE_HAT),
+    HANDHELD(4, text("Handheld", AQUA), Mytems.CUPID_WINGS),
+    FLAG(5, text("Flags"), Mytems.PRIDE_FLAG),
     MOUNT(6, text("Mounts", AQUA), Mytems.SANTA_SLED),
     ;
 

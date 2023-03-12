@@ -19,6 +19,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
@@ -88,6 +89,14 @@ public enum Mount implements WardrobeItem {
                                          text("Click to mount", color(0xFFFF00))));
             });
         return itemStack;
+    }
+
+    @Override
+    public List<Component> getMenuTooltip() {
+        return List.of(getDisplayName(),
+                       text("Mount", DARK_GRAY),
+                       empty(),
+                       textOfChildren(Mytems.MOUSE_LEFT, text(" Ride", GRAY)));
     }
 
     @Override
