@@ -66,16 +66,16 @@ public final class FlagWardrobeItem implements WardrobeItem {
         return List.of(getDisplayName(),
                        text("Flag", DARK_GRAY),
                        empty(),
-                       textOfChildren(Mytems.MOUSE_LEFT, text(" Wear on main sleeve ", GRAY)),
                        textOfChildren(Mytems.MOUSE_LEFT, text(" Wear on offhand sleeve", GRAY)),
+                       textOfChildren(Mytems.MOUSE_RIGHT, text(" Wear on main sleeve ", GRAY)),
                        textOfChildren(Mytems.SHIFT_KEY, Mytems.MOUSE_LEFT, text(" Wear on head", GRAY)));
     }
 
     @Override
     public void onClick(Player player, InventoryClickEvent event) {
         final EquipmentSlot slot = switch (event.getClick()) {
-        case LEFT -> EquipmentSlot.HAND;
-        case RIGHT -> EquipmentSlot.OFF_HAND;
+        case LEFT -> EquipmentSlot.OFF_HAND;
+        case RIGHT -> EquipmentSlot.HAND;
         case SHIFT_LEFT -> EquipmentSlot.HEAD;
         default -> null;
         };
