@@ -84,6 +84,8 @@ public enum Package {
     ELF_HAT(Hat.ELF_HAT,
             Costume.ELF),
     KOBOLD(Hat.KOBOLD_HEAD),
+    GOLDEN_CROWN(Hat.GOLDEN_CROWN),
+    BUTTERFLY_WINGS(Handheld.BUTTERFLY_WINGS),
     ;
 
     public final Component displayName;

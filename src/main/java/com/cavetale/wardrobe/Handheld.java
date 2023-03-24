@@ -24,6 +24,7 @@ public enum Handheld implements WardrobeItem {
     RED_LIGHTSABER(text("Red Laser Sword", color(0xff1d0b)), Mytems.RED_LIGHTSABER, true),
     BLUE_LIGHTSABER(text("Blue Laser Sword", color(0xadf3f3)), Mytems.BLUE_LIGHTSABER, true),
     CUPID_WINGS(text("Cupid Wings", color(0xFFA3C3)), Mytems.CUPID_WINGS, false),
+    BUTTERFLY_WINGS(text("Butterfly Wings", color(0xADD8E6)), Mytems.BUTTERFLY_WINGS, false),
     ;
 
     public final Component displayName;
