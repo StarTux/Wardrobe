@@ -102,8 +102,8 @@ public final class EasterEggsCompanion implements Companion {
                                                            new AxisAngle4f(0f, 0f, 0f, 0f),
                                                            new Vector3f(1f, 1f, 0f),
                                                            new AxisAngle4f(0f, 0f, 0f, 0f)));
-                    e.setShadowStrength(1.0f);
-                    e.setShadowRadius(0.5f);
+                    e.setShadowStrength(0.75f);
+                    e.setShadowRadius(0.25f);
                 });
             if (entity == null) break;
             entities.add(entity);
