@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
@@ -42,6 +43,14 @@ public final class EasterEggsCompanion implements Companion {
 
     @Override
     public void tick() {
+        if (player.getGameMode() == GameMode.SPECTATOR) {
+            clearEntities();
+            return;
+        } else if (entities.isEmpty()) {
+            clearEntities();
+            spawnEntities();
+            return;
+        }
         boolean entityIsInvalid = false;
         for (var entity : entities) {
             if (!entity.isValid()) {
