@@ -21,6 +21,7 @@ public enum Category {
     HANDHELD(4, text("Handheld", AQUA), Mytems.CUPID_WINGS),
     FLAG(5, text("Flags"), Mytems.PRIDE_FLAG),
     MOUNT(6, text("Mounts", AQUA), Mytems.SANTA_SLED),
+    COMPANION(7, text("Companions", GREEN), Mytems.HEART),
     ;
 
     public final int guiIndex;

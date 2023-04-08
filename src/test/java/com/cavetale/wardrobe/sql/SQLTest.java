@@ -7,5 +7,6 @@ public final class SQLTest {
     @Test
     public void test() {
         System.out.println(SQLDatabase.testTableCreation(SQLPackage.class));
+        System.out.println(SQLDatabase.testTableCreation(SQLEmote.class));
     }
 }

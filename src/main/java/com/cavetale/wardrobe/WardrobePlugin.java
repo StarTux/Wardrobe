@@ -1,6 +1,10 @@
 package com.cavetale.wardrobe;
 
+import com.cavetale.wardrobe.emote.Emotes;
 import com.cavetale.wardrobe.mount.Ride;
+import com.cavetale.wardrobe.session.Session;
+import com.cavetale.wardrobe.session.Sessions;
+import com.cavetale.wardrobe.sql.SQLEmote;
 import com.cavetale.wardrobe.sql.SQLPackage;
 import com.cavetale.wardrobe.util.Gui;
 import com.winthier.sql.SQLDatabase;
@@ -16,11 +20,13 @@ public final class WardrobePlugin extends JavaPlugin {
     protected AdminCommand adminCommand = new AdminCommand(this);
     protected EventListener eventListener = new EventListener(this);
     protected SQLDatabase database = new SQLDatabase(this);
+    @Getter protected Emotes emotes = new Emotes();
+    @Getter protected Sessions sessions = new Sessions(this);
 
     @Override
     public void onEnable() {
         instance = this;
-        database.registerTables(List.of(SQLPackage.class));
+        database.registerTables(List.of(SQLPackage.class, SQLEmote.class));
         if (!database.createAllTables()) {
             getLogger().warning("Database creation failed! Plugin disabled.");
             setEnabled(false);
@@ -30,6 +36,7 @@ public final class WardrobePlugin extends JavaPlugin {
         adminCommand.enable();
         eventListener.enable();
         Gui.enable(this);
+        sessions.enable();
     }
 
     @Override
@@ -50,5 +57,13 @@ public final class WardrobePlugin extends JavaPlugin {
 
     public static WardrobePlugin plugin() {
         return instance;
+    }
+
+    public static Sessions sessions() {
+        return instance.sessions;
+    }
+
+    public static Session sessionOf(Player player) {
+        return instance.sessions.of(player);
     }
 }

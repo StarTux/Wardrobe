@@ -2,10 +2,16 @@ package com.cavetale.wardrobe;
 
 import com.cavetale.core.command.AbstractCommand;
 import com.cavetale.core.command.CommandArgCompleter;
+import com.cavetale.core.command.CommandNode;
 import com.cavetale.core.command.CommandWarn;
+import com.cavetale.inventory.storage.InventoryStorage;
+import com.cavetale.wardrobe.emote.Emote;
+import com.cavetale.wardrobe.sql.SQLEmote;
 import com.cavetale.wardrobe.sql.SQLPackage;
+import com.cavetale.wardrobe.util.Gui;
 import com.winthier.playercache.PlayerCache;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -40,6 +46,12 @@ public final class AdminCommand extends AbstractCommand<WardrobePlugin> {
             .description("Account transfer")
             .completers(PlayerCache.NAME_COMPLETER, PlayerCache.NAME_COMPLETER)
             .senderCaller(this::transfer);
+        // /wardrobeadm emote
+        CommandNode emoteNode = rootNode.addChild("emote")
+            .description("Emote subcommands");
+        emoteNode.addChild("create").arguments("<name>")
+            .description("Create emote")
+            .playerCaller(this::emoteCreate);
     }
 
     private boolean player(CommandSender sender, String[] args) {
@@ -102,6 +114,32 @@ public final class AdminCommand extends AbstractCommand<WardrobePlugin> {
         sender.sendMessage(text("Packages transferred from " + from.name + " to " + to.name + ":"
                                 + " rows=" + rows.size()
                                 + " count=" + count));
+        return true;
+    }
+
+    private boolean emoteCreate(Player player, String[] args) {
+        if (args.length != 1) return false;
+        String name = args[0];
+        Emote old = plugin.getEmotes().getEmote(name);
+        if (old != null) {
+            throw new CommandWarn("Emote already exists: " + old.getName());
+        }
+        Gui gui = new Gui(plugin)
+            .size(6 * 9)
+            .title(text("Emote " + name));
+        gui.onClose(c -> {
+                SQLEmote row = new SQLEmote();
+                row.setName(name);
+                row.setDisplayName(name);
+                row.setFrameTime(0);
+                row.setRepeat(0);
+                SQLEmote.Tag tag = new SQLEmote.Tag();
+                tag.setInventory(InventoryStorage.of(gui.getInventory()));
+                row.storeTag(tag);
+                row.setCreated(new Date());
+            });
+        gui.setEditable(true);
+        gui.open(player);
         return true;
     }
 }

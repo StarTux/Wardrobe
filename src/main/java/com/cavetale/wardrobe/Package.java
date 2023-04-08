@@ -1,5 +1,6 @@
 package com.cavetale.wardrobe;
 
+import com.cavetale.wardrobe.companion.CompanionType;
 import java.util.ArrayList;
 import java.util.List;
 import net.kyori.adventure.text.Component;
@@ -10,7 +11,7 @@ import static net.kyori.adventure.text.format.NamedTextColor.*;
  * One package of items purchasable by player.
  */
 public enum Package {
-    WHITE_BUNNY(Hat.WHITE_BUNNY_EARS, Costume.WHITE_BUNNY),
+    WHITE_BUNNY(Hat.WHITE_BUNNY_EARS, CompanionType.EASTER_EGGS, Costume.WHITE_BUNNY),
     RED_LIGHTSABER(Handheld.RED_LIGHTSABER),
     BLUE_LIGHTSABER(Handheld.BLUE_LIGHTSABER),
     PIRATE_HAT(Hat.PIRATE_HAT,

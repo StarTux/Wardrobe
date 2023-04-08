@@ -1,5 +1,6 @@
 package com.cavetale.wardrobe;
 
+import com.cavetale.wardrobe.companion.CompanionType;
 import java.util.ArrayList;
 import java.util.List;
 import net.kyori.adventure.text.Component;
@@ -38,6 +39,7 @@ public interface WardrobeItem {
         list.addAll(List.of(Handheld.values()));
         list.addAll(List.of(Mount.values()));
         list.addAll(FlagWardrobeItem.values());
+        for (var it : CompanionType.values()) list.add(it);
         return list;
     }
 

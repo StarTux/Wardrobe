@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -33,6 +34,7 @@ public final class Gui implements InventoryHolder {
     private Consumer<InventoryOpenEvent> onOpen = null;
     @Getter private int size = 3 * 9;
     @Getter private Component title;
+    @Setter private boolean editable;
     boolean locked = false;
 
     @RequiredArgsConstructor @AllArgsConstructor
@@ -138,20 +140,20 @@ public final class Gui implements InventoryHolder {
         return this;
     }
 
-    void onInventoryOpen(InventoryOpenEvent event) {
+    private void onInventoryOpen(InventoryOpenEvent event) {
         if (onOpen != null) {
             Bukkit.getScheduler().runTask(plugin, () -> onOpen.accept(event));
         }
     }
 
-    void onInventoryClose(InventoryCloseEvent event) {
+    private void onInventoryClose(InventoryCloseEvent event) {
         if (onClose != null) {
             Bukkit.getScheduler().runTask(plugin, () -> onClose.accept(event));
         }
     }
 
-    void onInventoryClick(InventoryClickEvent event) {
-        event.setCancelled(true);
+    private void onInventoryClick(InventoryClickEvent event) {
+        if (!editable) event.setCancelled(true);
         if (locked) return;
         if (!(event.getWhoClicked() instanceof Player)) return;
         Player player = (Player) event.getWhoClicked();
@@ -169,8 +171,8 @@ public final class Gui implements InventoryHolder {
         }
     }
 
-    void onInventoryDrag(InventoryDragEvent event) {
-        event.setCancelled(true);
+    private void onInventoryDrag(InventoryDragEvent event) {
+        if (!editable) event.setCancelled(true);
     }
 
     public static final class EventListener implements Listener {
