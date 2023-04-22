@@ -8,5 +8,6 @@ public final class SQLTest {
     public void test() {
         System.out.println(SQLDatabase.testTableCreation(SQLPackage.class));
         System.out.println(SQLDatabase.testTableCreation(SQLEmote.class));
+        System.out.println(SQLDatabase.testTableCreation(SQLEquipped.class));
     }
 }

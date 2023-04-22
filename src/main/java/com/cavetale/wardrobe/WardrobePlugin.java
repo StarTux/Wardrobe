@@ -5,6 +5,7 @@ import com.cavetale.wardrobe.mount.Ride;
 import com.cavetale.wardrobe.session.Session;
 import com.cavetale.wardrobe.session.Sessions;
 import com.cavetale.wardrobe.sql.SQLEmote;
+import com.cavetale.wardrobe.sql.SQLEquipped;
 import com.cavetale.wardrobe.sql.SQLPackage;
 import com.cavetale.wardrobe.util.Gui;
 import com.winthier.sql.SQLDatabase;
@@ -26,7 +27,7 @@ public final class WardrobePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        database.registerTables(List.of(SQLPackage.class, SQLEmote.class));
+        database.registerTables(List.of(SQLPackage.class, SQLEmote.class, SQLEquipped.class));
         if (!database.createAllTables()) {
             getLogger().warning("Database creation failed! Plugin disabled.");
             setEnabled(false);
@@ -57,6 +58,10 @@ public final class WardrobePlugin extends JavaPlugin {
 
     public static WardrobePlugin plugin() {
         return instance;
+    }
+
+    public static SQLDatabase database() {
+        return instance.database;
     }
 
     public static Sessions sessions() {

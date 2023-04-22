@@ -2,15 +2,11 @@ package com.cavetale.wardrobe.companion;
 
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Entities;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.Particle;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;

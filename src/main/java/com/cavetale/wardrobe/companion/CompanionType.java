@@ -58,16 +58,26 @@ public enum CompanionType implements WardrobeItem {
         if (session.getCompanion() != null && session.getCompanion().getType() == this) {
             session.getCompanion().stop();
             session.setCompanion(null);
+            session.saveCompanion();
         } else {
-            if (session.getCompanion() != null) {
-                session.getCompanion().stop();
-                session.setCompanion(null);
-            }
-            Companion companion = companionSupplier.get();
-            session.setCompanion(companion);
-            companion.start(player);
+            equip(session, player);
+            session.saveCompanion();
         }
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
+    }
+
+    /**
+     * Equip this type.  Called by this and Session.
+     */
+    public Companion equip(Session session, Player player) {
+        if (session.getCompanion() != null) {
+            session.getCompanion().stop();
+            session.setCompanion(null);
+        }
+        Companion companion = companionSupplier.get();
+        session.setCompanion(companion);
+        companion.start(player);
+        return companion;
     }
 
     @Override
@@ -79,5 +89,13 @@ public enum CompanionType implements WardrobeItem {
     public boolean isWearing(Player player) {
         Session session = sessionOf(player);
         return session.getCompanion() != null && session.getCompanion().getType() == this;
+    }
+
+    public static CompanionType of(String name) {
+        try {
+            return valueOf(name.toUpperCase());
+        } catch (IllegalArgumentException iae) {
+            return null;
+        }
     }
 }

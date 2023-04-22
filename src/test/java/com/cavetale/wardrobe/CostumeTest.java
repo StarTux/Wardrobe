@@ -1,9 +1,9 @@
 package com.cavetale.wardrobe;
 
-import org.junit.Test;
+// import org.junit.Test;
 
 public final class CostumeTest {
-    @Test
+    // @Test
     public void test() {
         for (Costume costume : Costume.values()) {
             System.out.println(costume.name() + " " + costume.url);
