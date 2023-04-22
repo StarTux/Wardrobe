@@ -25,6 +25,13 @@ import static net.kyori.adventure.text.format.TextColor.color;
 @RequiredArgsConstructor
 public enum CompanionType implements WardrobeItem {
     EASTER_EGGS(text("Easter Eggs", color(0x80CEE1)), EasterEggsCompanion::new, Mytems.EASTER_EGG::createIcon),
+    BLUE_BUTTERFLY(text("Blue Butterfly", GOLD), ButterflyCompanion.Blue::new, Mytems.BLUE_BUTTERFLY::createIcon),
+    CYAN_BUTTERFLY(text("Cyan Butterfly", GOLD), ButterflyCompanion.Cyan::new, Mytems.CYAN_BUTTERFLY::createIcon),
+    GREEN_BUTTERFLY(text("Green Butterfly", GOLD), ButterflyCompanion.Green::new, Mytems.GREEN_BUTTERFLY::createIcon),
+    ORANGE_BUTTERFLY(text("Orange Butterfly", GOLD), ButterflyCompanion.Orange::new, Mytems.ORANGE_BUTTERFLY::createIcon),
+    PINK_BUTTERFLY(text("Pink Butterfly", GOLD), ButterflyCompanion.Pink::new, Mytems.PINK_BUTTERFLY::createIcon),
+    PURPLE_BUTTERFLY(text("Purple Butterfly", GOLD), ButterflyCompanion.Purple::new, Mytems.PURPLE_BUTTERFLY::createIcon),
+    YELLOW_BUTTERFLY(text("Yellow Butterfly", GOLD), ButterflyCompanion.Yellow::new, Mytems.YELLOW_BUTTERFLY::createIcon),
     ;
 
     @Getter public final Component displayName;

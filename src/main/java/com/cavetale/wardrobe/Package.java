@@ -87,6 +87,13 @@ public enum Package {
     KOBOLD(Hat.KOBOLD_HEAD),
     GOLDEN_CROWN(Hat.GOLDEN_CROWN),
     BUTTERFLY_WINGS(Handheld.BUTTERFLY_WINGS),
+    BUTTERFLY_COMPANIONS(CompanionType.BLUE_BUTTERFLY,
+                         CompanionType.CYAN_BUTTERFLY,
+                         CompanionType.GREEN_BUTTERFLY,
+                         CompanionType.ORANGE_BUTTERFLY,
+                         CompanionType.PINK_BUTTERFLY,
+                         CompanionType.PURPLE_BUTTERFLY,
+                         CompanionType.YELLOW_BUTTERFLY),
     ;
 
     public final Component displayName;
