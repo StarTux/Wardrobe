@@ -29,7 +29,8 @@ public final class FlagWardrobeItem implements WardrobeItem {
         List<FlagWardrobeItem> result = new ArrayList<>();
         for (Title title : TitlePlugin.getInstance().getTitles()) {
             Mytems mytems = title.getMytems();
-            if (mytems == null || mytems.category != MytemsCategory.FLAG) continue;
+            if (mytems == null) continue;
+            if (mytems.category != MytemsCategory.COUNTRY_FLAG && mytems.category != MytemsCategory.PRIDE_FLAGS) continue;
             result.add(new FlagWardrobeItem(title, mytems));
         }
         return result;
@@ -37,7 +38,8 @@ public final class FlagWardrobeItem implements WardrobeItem {
 
     public static FlagWardrobeItem of(ItemStack item) {
         Mytems mytems = Mytems.forItem(item);
-        if (mytems == null || mytems.category != MytemsCategory.FLAG) return null;
+        if (mytems == null) return null;
+        if (mytems.category != MytemsCategory.COUNTRY_FLAG && mytems.category != MytemsCategory.PRIDE_FLAGS) return null;
         for (Title title : TitlePlugin.getInstance().getTitles()) {
             if (title.getMytems() == mytems) {
                 return new FlagWardrobeItem(title, mytems);
