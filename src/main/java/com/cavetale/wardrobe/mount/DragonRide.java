@@ -117,7 +117,8 @@ public final class DragonRide extends Ride {
                 Object handle = dragon.getClass().getMethod("getHandle").invoke(dragon);
                 // 1.19.3 net.minecraft.world.entity.Entity::p(float yaw)
                 // 1.19.4 net.minecraft.world.entity.Entity::f(float yaw)
-                handle.getClass().getMethod("f", float.class).invoke(handle, yaw + 180f);
+                // 1.20.1 net.minecraft.world.entity.Entity::a_(float yaw)
+                handle.getClass().getMethod("a_", float.class).invoke(handle, yaw + 180f);
             } catch (Exception e) {
                 e.printStackTrace();
                 failed = true;
