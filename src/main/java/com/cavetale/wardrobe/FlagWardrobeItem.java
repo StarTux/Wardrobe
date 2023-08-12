@@ -1,7 +1,6 @@
 package com.cavetale.wardrobe;
 
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.MytemsCategory;
 import com.winthier.title.Title;
 import com.winthier.title.TitlePlugin;
 import java.util.ArrayList;
@@ -44,7 +43,13 @@ public final class FlagWardrobeItem implements WardrobeItem {
     public static FlagWardrobeItem of(ItemStack item) {
         Mytems mytems = Mytems.forItem(item);
         if (mytems == null) return null;
-        if (mytems.category != MytemsCategory.COUNTRY_FLAG && mytems.category != MytemsCategory.PRIDE_FLAGS) return null;
+        switch (mytems.category) {
+        case COUNTRY_FLAG:
+        case PRIDE_FLAGS:
+        case FUN_FLAGS:
+            break;
+        default: return null;
+        }
         for (Title title : TitlePlugin.getInstance().getTitles()) {
             if (title.getMytems() == mytems) {
                 return new FlagWardrobeItem(title, mytems);
