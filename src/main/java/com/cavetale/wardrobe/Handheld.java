@@ -25,6 +25,7 @@ public enum Handheld implements WardrobeItem {
     BLUE_LIGHTSABER(text("Blue Laser Sword", color(0xadf3f3)), Mytems.BLUE_LIGHTSABER, true),
     CUPID_WINGS(text("Cupid Wings", color(0xFFA3C3)), Mytems.CUPID_WINGS, false),
     BUTTERFLY_WINGS(text("Butterfly Wings", color(0xADD8E6)), Mytems.BUTTERFLY_WINGS, false),
+    HOOK_HAND(text("Hookhand", GRAY), Mytems.HOOK_HAND, true),
     ;
 
     public final Component displayName;
@@ -145,5 +146,10 @@ public enum Handheld implements WardrobeItem {
     public boolean isWearing(Player player) {
         return of(player, false) == this
             || of(player, true) == this;
+    }
+
+    @Override
+    public int getIndex() {
+        return ordinal();
     }
 }

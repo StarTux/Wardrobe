@@ -30,8 +30,13 @@ public final class FlagWardrobeItem implements WardrobeItem {
         for (Title title : TitlePlugin.getInstance().getTitles()) {
             Mytems mytems = title.getMytems();
             if (mytems == null) continue;
-            if (mytems.category != MytemsCategory.COUNTRY_FLAG && mytems.category != MytemsCategory.PRIDE_FLAGS) continue;
-            result.add(new FlagWardrobeItem(title, mytems));
+            switch (mytems.category) {
+            case COUNTRY_FLAG:
+            case PRIDE_FLAGS:
+            case FUN_FLAGS:
+                result.add(new FlagWardrobeItem(title, mytems));
+            default: break;
+            }
         }
         return result;
     }
@@ -117,7 +122,7 @@ public final class FlagWardrobeItem implements WardrobeItem {
     }
 
     @Override
-    public int ordinal() {
+    public int getIndex() {
         return mytems.ordinal();
     }
 

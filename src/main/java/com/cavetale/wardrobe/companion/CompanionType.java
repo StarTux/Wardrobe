@@ -91,6 +91,11 @@ public enum CompanionType implements WardrobeItem {
         return session.getCompanion() != null && session.getCompanion().getType() == this;
     }
 
+    @Override
+    public int getIndex() {
+        return ordinal();
+    }
+
     public static CompanionType of(String name) {
         try {
             return valueOf(name.toUpperCase());

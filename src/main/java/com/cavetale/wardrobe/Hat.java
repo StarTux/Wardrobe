@@ -200,4 +200,9 @@ public enum Hat implements WardrobeItem {
     public boolean isWearing(Player player) {
         return of(player) == this;
     }
+
+    @Override
+    public int getIndex() {
+        return ordinal();
+    }
 }

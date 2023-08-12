@@ -54,6 +54,8 @@ public final class WardrobePlugin extends JavaPlugin {
         Hat.remove(player);
         Handheld.remove(player, false);
         Handheld.remove(player, true);
+        ShoulderEntity.remove(player, false);
+        ShoulderEntity.remove(player, true);
     }
 
     public static WardrobePlugin plugin() {

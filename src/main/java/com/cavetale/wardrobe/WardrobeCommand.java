@@ -155,8 +155,8 @@ public final class WardrobeCommand implements TabExecutor {
                 boolean bb = context.unlockedItems.contains(b);
                 if (aa && !bb) return -1;
                 if (bb && !aa) return 1;
-                return Integer.compare(a.getCategory().ordinal() * 1000 + a.ordinal(),
-                                       b.getCategory().ordinal() * 1000 + b.ordinal());
+                return Integer.compare(a.getCategory().ordinal() * 1000 + a.getIndex(),
+                                       b.getCategory().ordinal() * 1000 + b.getIndex());
             });
         final int pageSize = 5 * 9;
         final int pageCount = (itemList.size() - 1) / pageSize + 1;

@@ -94,6 +94,13 @@ public enum Package {
                          CompanionType.PINK_BUTTERFLY,
                          CompanionType.PURPLE_BUTTERFLY,
                          CompanionType.YELLOW_BUTTERFLY),
+    PIRATE(Handheld.HOOK_HAND,
+           Hat.PIRATE_HAT,
+           ShoulderEntity.BLUE_PARROT,
+           ShoulderEntity.CYAN_PARROT,
+           ShoulderEntity.GRAY_PARROT,
+           ShoulderEntity.GREEN_PARROT,
+           ShoulderEntity.RED_PARROT),
     ;
 
     public final Component displayName;

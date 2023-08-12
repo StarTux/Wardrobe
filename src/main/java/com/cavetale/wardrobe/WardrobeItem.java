@@ -39,6 +39,7 @@ public interface WardrobeItem {
         list.addAll(List.of(Handheld.values()));
         list.addAll(List.of(Mount.values()));
         list.addAll(FlagWardrobeItem.values());
+        list.addAll(List.of(ShoulderEntity.values()));
         for (var it : CompanionType.values()) list.add(it);
         return list;
     }
@@ -47,7 +48,7 @@ public interface WardrobeItem {
 
     Category getCategory();
 
-    int ordinal();
+    int getIndex();
 
     boolean isWearing(Player player);
 }

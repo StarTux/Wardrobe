@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -216,5 +217,12 @@ public final class EventListener implements Listener {
                                    .hoverEvent(showText(textOfChildren(Mytems.HEART, text(" This heart beats for you", color(0xFFA3C3)))))
                                    .clickEvent(runCommand("/wardrobe click")));
             }, 200L);
+    }
+
+    @EventHandler
+    private void onShoulderEntitySpawn(CreatureSpawnEvent event) {
+        if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.SHOULDER_ENTITY) return;
+        if (ShoulderEntity.of(event.getEntity()) == null) return;
+        event.setCancelled(true);
     }
 }

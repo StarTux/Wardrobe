@@ -170,4 +170,9 @@ public enum Costume implements WardrobeItem {
     public boolean isWearing(Player player) {
         return false;
     }
+
+    @Override
+    public int getIndex() {
+        return ordinal();
+    }
 }
