@@ -19,6 +19,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.command.Command;
@@ -89,11 +90,15 @@ public final class WardrobeCommand implements TabExecutor {
             click(player);
             return true;
         }
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("[wardrobe:wardrobe] player expected");
             return true;
         }
-        openGui((Player) sender);
+        if (player.getGameMode() == GameMode.SPECTATOR) {
+            player.sendMessage(text("Cannot open while in spectator mode!"));
+            return true;
+        }
+        openGui(player);
         return true;
     }
 

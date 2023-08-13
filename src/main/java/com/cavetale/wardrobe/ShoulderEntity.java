@@ -126,6 +126,16 @@ public enum ShoulderEntity implements WardrobeItem {
         if (event.getClick() != ClickType.LEFT && event.getClick() != ClickType.RIGHT) return;
         final boolean left = event.isLeftClick();
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
+        switch (player.getGameMode()) {
+        case CREATIVE:
+            player.sendMessage(text("Does not work in creative mode!", RED));
+            return;
+        case SPECTATOR:
+            player.sendMessage(text("Does not work in spectator mode!", RED));
+            player.closeInventory();
+            return;
+        default: break;
+        }
         if (this == remove(player, left)) {
             player.sendMessage(textOfChildren(text("Removed: ", WardrobeCommand.COLOR), displayName));
             return;

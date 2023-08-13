@@ -22,8 +22,10 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -224,5 +226,32 @@ public final class EventListener implements Listener {
         if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.SHOULDER_ENTITY) return;
         if (ShoulderEntity.of(event.getEntity()) == null) return;
         event.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    private void onPlayerGameModeChange(PlayerGameModeChangeEvent event) {
+        Player player = event.getPlayer();
+        switch (event.getNewGameMode()) {
+        case SPECTATOR:
+            ShoulderEntity.remove(player, false);
+            ShoulderEntity.remove(player, true);
+            Gui gui = Gui.of(player);
+            if (gui != null) player.closeInventory();
+            break;
+        case CREATIVE:
+            ShoulderEntity.remove(player, false);
+            ShoulderEntity.remove(player, true);
+            break;
+        default: break;
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    private void onPlayerDeath(PlayerDeathEvent event) {
+        Player player = event.getEntity();
+        ShoulderEntity.remove(player, false);
+        ShoulderEntity.remove(player, true);
+        Gui gui = Gui.of(player);
+        if (gui != null) player.closeInventory();
     }
 }
