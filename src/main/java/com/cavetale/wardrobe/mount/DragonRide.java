@@ -119,6 +119,7 @@ public final class DragonRide extends Ride {
                 // 1.19.4 net.minecraft.world.entity.Entity::f(float yaw)
                 // 1.20.1 net.minecraft.world.entity.Entity::a_(float yaw)
                 // 1.20.2 net.minecraft.world.entity.Entity::r(float yaw)
+                // 1.20.4 net.minecraft.world.entity.Entity::r(float yaw)
                 handle.getClass().getMethod("r", float.class).invoke(handle, yaw + 180f);
             } catch (Exception e) {
                 e.printStackTrace();
