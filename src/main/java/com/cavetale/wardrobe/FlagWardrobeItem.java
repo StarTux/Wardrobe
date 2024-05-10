@@ -34,22 +34,37 @@ public final class FlagWardrobeItem implements WardrobeItem {
             case PRIDE_FLAGS:
             case FUN_FLAGS:
                 result.add(new FlagWardrobeItem(title, mytems));
+                continue;
+            default: break;
+            }
+            switch (mytems) {
+            case MOM:
+                result.add(new FlagWardrobeItem(title, mytems));
+                continue;
             default: break;
             }
         }
         return result;
     }
 
-    public static FlagWardrobeItem of(ItemStack item) {
-        Mytems mytems = Mytems.forItem(item);
-        if (mytems == null) return null;
+    private static boolean isRightMytem(Mytems mytems) {
         switch (mytems.category) {
         case COUNTRY_FLAG:
         case PRIDE_FLAGS:
         case FUN_FLAGS:
-            break;
-        default: return null;
+            return true;
+        default: break;
         }
+        switch (mytems) {
+        case MOM: return true;
+        default: break;
+        }
+        return false;
+    }
+
+    public static FlagWardrobeItem of(ItemStack item) {
+        Mytems mytems = Mytems.forItem(item);
+        if (mytems == null || !isRightMytem(mytems)) return null;
         for (Title title : TitlePlugin.getInstance().getTitles()) {
             if (title.getMytems() == mytems) {
                 return new FlagWardrobeItem(title, mytems);
