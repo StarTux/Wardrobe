@@ -37,7 +37,7 @@ public final class DragonMountAdapter implements MountAdapter {
                 Entities.setTransient(e);
                 e.setInvisible(true);
                 e.setSmall(false);
-                e.setDisabledSlots(EquipmentSlot.values());
+                e.setDisabledSlots(EquipmentSlot.HAND, EquipmentSlot.OFF_HAND, EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
             });
         if (armorStand == null) {
             dragon.remove();

@@ -29,7 +29,7 @@ public final class ArmorStandMountAdapter implements MountAdapter {
                 as.getEquipment().setHelmet(mytems.createItemStack());
                 as.setInvisible(true);
                 as.setSmall(false);
-                as.setDisabledSlots(EquipmentSlot.values());
+                as.setDisabledSlots(EquipmentSlot.HAND, EquipmentSlot.OFF_HAND, EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
             });
         if (armorStand == null) return MountResult.UNKNOWN;
         armorStand.addPassenger(player);
