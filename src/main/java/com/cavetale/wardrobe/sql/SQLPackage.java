@@ -2,10 +2,10 @@ package com.cavetale.wardrobe.sql;
 
 import com.cavetale.wardrobe.Package;
 import com.cavetale.wardrobe.WardrobePlugin;
+import com.winthier.sql.SQLRow;
 import com.winthier.sql.SQLRow.Name;
 import com.winthier.sql.SQLRow.NotNull;
 import com.winthier.sql.SQLRow.UniqueKey;
-import com.winthier.sql.SQLRow;
 import java.util.Date;
 import java.util.UUID;
 import java.util.logging.Level;
