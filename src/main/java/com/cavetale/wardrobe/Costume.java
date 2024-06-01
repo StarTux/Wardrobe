@@ -5,6 +5,8 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.wardrobe.util.Items;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Base64;
 import java.util.HashMap;
@@ -93,9 +95,11 @@ public enum Costume implements WardrobeItem {
         map2 = (Map<String, Object>) map2.get("textures");
         map2 = (Map<String, Object>) map2.get("SKIN");
         try {
-            this.url = new URL((String) map2.get("url"));
+            this.url = new URI((String) map2.get("url")).toURL();
         } catch (MalformedURLException murle) {
             throw new IllegalStateException(murle);
+        } catch (URISyntaxException urise) {
+            throw new IllegalStateException(urise);
         }
     }
 

@@ -92,7 +92,7 @@ public abstract class ButterflyCompanion implements Companion {
         Location loc = getLocation();
         entity.teleport(loc);
         if (ticks % 2 == 0) {
-            loc.getWorld().spawnParticle(Particle.REDSTONE, loc, 1, 0.0, 0.0, 0.0, 0.0, dust);
+            loc.getWorld().spawnParticle(Particle.DUST, loc, 1, 0.0, 0.0, 0.0, 0.0, dust);
         }
         ticks += 1;
     }

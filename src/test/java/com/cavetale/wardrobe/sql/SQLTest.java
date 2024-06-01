@@ -4,7 +4,9 @@ import com.winthier.sql.SQLDatabase;
 import org.junit.Test;
 
 public final class SQLTest {
-    @Test
+    /**
+     * Print all database tables.
+     */
     public void test() {
         System.out.println(SQLDatabase.testTableCreation(SQLPackage.class));
         System.out.println(SQLDatabase.testTableCreation(SQLEmote.class));

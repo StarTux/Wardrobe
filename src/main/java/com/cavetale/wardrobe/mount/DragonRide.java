@@ -86,7 +86,7 @@ public final class DragonRide extends Ride {
             cancel();
             player.sendActionBar(text("Your dragon crashed", RED));
             player.sendMessage(text("Your dragon crashed", RED));
-            player.spawnParticle(Particle.EXPLOSION_HUGE, dragon.getLocation(), 1, 2.0, 2.0, 2.0, 0.0);
+            player.spawnParticle(Particle.EXPLOSION_EMITTER, dragon.getLocation(), 1, 2.0, 2.0, 2.0, 0.0);
             player.playSound(dragon.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, SoundCategory.MASTER, 1.0f, 1.0f);
             return;
         }
