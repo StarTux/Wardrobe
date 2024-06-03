@@ -112,21 +112,7 @@ public final class DragonRide extends Ride {
         final Vector armorStandVector = dloc.toVector().add(upVector).subtract(aloc.toVector()).add(dragonVector);
         armorStand.setVelocity(armorStandVector);
         armorStand.setRotation(ploc.getYaw(), 0.0f);
-        if (!failed) {
-            try {
-                Object handle = dragon.getClass().getMethod("getHandle").invoke(dragon);
-                // 1.19.3 net.minecraft.world.entity.Entity::p(float yaw)
-                // 1.19.4 net.minecraft.world.entity.Entity::f(float yaw)
-                // 1.20.1 net.minecraft.world.entity.Entity::a_(float yaw)
-                // 1.20.2 net.minecraft.world.entity.Entity::r(float yaw)
-                // 1.20.4 net.minecraft.world.entity.Entity::r(float yaw)
-                // 1.20.6 net.minecraft.world.entity.Entity::r(float yaw)
-                handle.getClass().getMethod("r", float.class).invoke(handle, yaw + 180f);
-            } catch (Exception e) {
-                e.printStackTrace();
-                failed = true;
-            }
-        }
+        dragon.setRotation(ploc.getYaw() + 180f, 0.0f);
     }
 
     @Override
