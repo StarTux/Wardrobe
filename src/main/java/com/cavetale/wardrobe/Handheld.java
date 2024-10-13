@@ -26,6 +26,9 @@ public enum Handheld implements WardrobeItem {
     CUPID_WINGS(text("Cupid Wings", color(0xFFA3C3)), Mytems.CUPID_WINGS, false),
     BUTTERFLY_WINGS(text("Butterfly Wings", color(0xADD8E6)), Mytems.BUTTERFLY_WINGS, false),
     HOOK_HAND(text("Hookhand", GRAY), Mytems.HOOK_HAND, true),
+    BAT_WINGS(text("Bat Wings", color(0xe39c71)), Mytems.BAT_WINGS, false),
+    VAMPIRE_WINGS(text("Vampire Wings", color(0x57080f)), Mytems.VAMPIRE_WINGS, false),
+    PUMPKIN_SUIT(text("Pumpkin Suit", GOLD), Mytems.PUMPKIN_SUIT, false),
     ;
 
     public final Component displayName;

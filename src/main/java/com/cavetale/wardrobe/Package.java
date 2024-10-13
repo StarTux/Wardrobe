@@ -6,6 +6,7 @@ import java.util.List;
 import net.kyori.adventure.text.Component;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
+import static net.kyori.adventure.text.format.TextColor.color;
 
 /*
  * One package of items purchasable by player.
@@ -27,7 +28,8 @@ public enum Package {
     PLAGUE_DOCTOR(Hat.PLAGUE_DOCTOR,
                   Hat.PLAGUE_DOCTOR_2,
                   Costume.PLAGUE_DOCTOR),
-    PUMPKIN(Hat.PUMPKIN_STUB),
+    PUMPKIN(Hat.PUMPKIN_STUB,
+            Handheld.PUMPKIN_SUIT),
     SANTA(Hat.SANTA_HAT,
           Costume.SANTA_POLAR_BEAR),
     CHRISTMAS_HAT(Hat.CHRISTMAS_HAT),
@@ -102,6 +104,9 @@ public enum Package {
            ShoulderEntity.GRAY_PARROT,
            ShoulderEntity.GREEN_PARROT,
            ShoulderEntity.RED_PARROT),
+    BAT_WINGS(text("Bat Wings", color(0xe39c71)),
+              Handheld.BAT_WINGS,
+              Handheld.VAMPIRE_WINGS),
     ;
 
     public final Component displayName;
