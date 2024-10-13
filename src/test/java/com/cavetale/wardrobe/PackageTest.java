@@ -1,7 +1,5 @@
 package com.cavetale.wardrobe;
 
-import org.junit.Test;
-
 public final class PackageTest {
     /**
      * Count all packages.

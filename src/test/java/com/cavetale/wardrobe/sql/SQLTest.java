@@ -1,7 +1,6 @@
 package com.cavetale.wardrobe.sql;
 
 import com.winthier.sql.SQLDatabase;
-import org.junit.Test;
 
 public final class SQLTest {
     /**
