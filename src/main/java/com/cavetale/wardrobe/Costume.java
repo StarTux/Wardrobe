@@ -2,7 +2,6 @@ package com.cavetale.wardrobe;
 
 import com.cavetale.core.util.Json;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.wardrobe.util.Items;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -26,6 +25,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.profile.PlayerTextures;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
@@ -141,9 +141,9 @@ public enum Costume implements WardrobeItem {
         ItemStack itemStack = new ItemStack(Material.PLAYER_HEAD);
         itemStack.editMeta(m -> {
                 SkullMeta meta = (SkullMeta) m;
-                Items.text(meta, List.of(displayName,
-                                         text("Player Skin", DARK_PURPLE),
-                                         text("Click to equip", TextColor.color(0xFFFF00))));
+                tooltip(meta, List.of(displayName,
+                                      text("Player Skin", DARK_PURPLE),
+                                      text("Click to equip", TextColor.color(0xFFFF00))));
                 meta.setPlayerProfile(toPlayerProfile());
             });
         return itemStack;

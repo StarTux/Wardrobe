@@ -6,7 +6,6 @@ import com.cavetale.wardrobe.mount.DragonMountAdapter;
 import com.cavetale.wardrobe.mount.MountAdapter;
 import com.cavetale.wardrobe.mount.MountResult;
 import com.cavetale.wardrobe.mount.Ride;
-import com.cavetale.wardrobe.util.Items;
 import java.util.List;
 import java.util.function.Supplier;
 import lombok.Getter;
@@ -19,6 +18,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
@@ -84,9 +84,9 @@ public enum Mount implements WardrobeItem {
         ItemStack itemStack = iconSupplier.get();
         itemStack.editMeta(meta -> {
                 meta.addItemFlags(ItemFlag.values());
-                Items.text(meta, List.of(displayName,
-                                         text("Mount", DARK_PURPLE),
-                                         text("Click to mount", color(0xFFFF00))));
+                tooltip(meta, List.of(displayName,
+                                      text("Mount", DARK_PURPLE),
+                                      text("Click to mount", color(0xFFFF00))));
             });
         return itemStack;
     }

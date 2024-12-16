@@ -3,8 +3,8 @@ package com.cavetale.wardrobe;
 import com.cavetale.core.connect.NetworkServer;
 import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
 import com.cavetale.mytems.Mytems;
+import com.cavetale.mytems.util.Gui;
 import com.cavetale.wardrobe.mount.Ride;
-import com.cavetale.wardrobe.util.Gui;
 import io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +56,7 @@ public final class EventListener implements Listener {
         if (clickedInventory == null) return;
         // The Wardrobe GUI is exempt.
         Gui gui = Gui.of(player);
-        if (gui != null && clickedInventory.equals(gui.getInventory())) return;
+        if (gui != null && gui.getPlugin() == plugin && clickedInventory.equals(gui.getInventory())) return;
         // When a WardrobeItem was clicked in the inventory, remove it!
         ItemStack clickedItem = event.getCurrentItem();
         WardrobeItem clickedWardrobeItem = WardrobeItem.of(clickedItem);
@@ -236,7 +236,7 @@ public final class EventListener implements Listener {
             ShoulderEntity.remove(player, false);
             ShoulderEntity.remove(player, true);
             Gui gui = Gui.of(player);
-            if (gui != null) player.closeInventory();
+            if (gui != null && gui.getPlugin() == plugin) player.closeInventory();
             break;
         case CREATIVE:
             ShoulderEntity.remove(player, false);
@@ -252,6 +252,6 @@ public final class EventListener implements Listener {
         ShoulderEntity.remove(player, false);
         ShoulderEntity.remove(player, true);
         Gui gui = Gui.of(player);
-        if (gui != null) player.closeInventory();
+        if (gui != null && gui.getPlugin() == plugin) player.closeInventory();
     }
 }

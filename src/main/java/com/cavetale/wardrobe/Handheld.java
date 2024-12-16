@@ -1,7 +1,6 @@
 package com.cavetale.wardrobe;
 
 import com.cavetale.mytems.Mytems;
-import com.cavetale.wardrobe.util.Items;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
@@ -115,7 +115,7 @@ public enum Handheld implements WardrobeItem {
 
     @Override
     public ItemStack toMenuItem() {
-        return Items.text(mytems.createItemStack(), List.of(displayName));
+        return tooltip(mytems.createItemStack(), List.of(displayName));
     }
 
     @Override

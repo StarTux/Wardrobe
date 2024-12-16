@@ -7,7 +7,6 @@ import com.cavetale.wardrobe.session.Sessions;
 import com.cavetale.wardrobe.sql.SQLEmote;
 import com.cavetale.wardrobe.sql.SQLEquipped;
 import com.cavetale.wardrobe.sql.SQLPackage;
-import com.cavetale.wardrobe.util.Gui;
 import com.winthier.sql.SQLDatabase;
 import java.util.List;
 import lombok.Getter;
@@ -25,8 +24,12 @@ public final class WardrobePlugin extends JavaPlugin {
     @Getter protected Sessions sessions = new Sessions(this);
 
     @Override
-    public void onEnable() {
+    public void onLoad() {
         instance = this;
+    }
+
+    @Override
+    public void onEnable() {
         database.registerTables(List.of(SQLPackage.class, SQLEmote.class, SQLEquipped.class));
         if (!database.createAllTables()) {
             getLogger().warning("Database creation failed! Plugin disabled.");
@@ -36,8 +39,8 @@ public final class WardrobePlugin extends JavaPlugin {
         wardrobeCommand.enable();
         adminCommand.enable();
         eventListener.enable();
-        Gui.enable(this);
         sessions.enable();
+        new MenuListener(this).enable();
     }
 
     @Override
@@ -45,7 +48,6 @@ public final class WardrobePlugin extends JavaPlugin {
         for (Player player : Bukkit.getOnlinePlayers()) {
             removeAll(player);
         }
-        Gui.disable(this);
         Ride.cancelAll();
     }
 

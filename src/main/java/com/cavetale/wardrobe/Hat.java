@@ -1,7 +1,6 @@
 package com.cavetale.wardrobe;
 
 import com.cavetale.mytems.Mytems;
-import com.cavetale.wardrobe.util.Items;
 import java.util.List;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -12,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
@@ -79,7 +79,7 @@ public enum Hat implements WardrobeItem {
     // Top Hat
     TOP_HAT(text("Top Hat", GRAY), Mytems.TOP_HAT),
     // Kobold
-    KOBOLD_HEAD(text("Cobold Head", DARK_GREEN), Mytems.KOBOLD_HEAD),
+    KOBOLD_HEAD(text("Kobold Head", DARK_GREEN), Mytems.KOBOLD_HEAD),
     ;
 
     public final Component displayName;
@@ -162,9 +162,9 @@ public enum Hat implements WardrobeItem {
     public ItemStack toMenuItem() {
         ItemStack itemStack = mytems.getMytem().createItemStack();
         itemStack.editMeta(meta -> {
-                Items.text(meta, List.of(displayName,
-                                         text("Helmet Item", DARK_PURPLE),
-                                         text("Click to equip", TextColor.color(0xFFFF00))));
+                tooltip(meta, List.of(displayName,
+                                      text("Helmet Item", DARK_PURPLE),
+                                      text("Click to equip", TextColor.color(0xFFFF00))));
             });
         return itemStack;
     }

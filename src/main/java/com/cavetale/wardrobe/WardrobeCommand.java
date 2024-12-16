@@ -1,10 +1,11 @@
 package com.cavetale.wardrobe;
 
 import com.cavetale.core.font.GuiOverlay;
+import com.cavetale.core.menu.MenuItemEvent;
 import com.cavetale.mytems.Mytems;
+import com.cavetale.mytems.util.Gui;
+import com.cavetale.mytems.util.Items;
 import com.cavetale.wardrobe.sql.SQLPackage;
-import com.cavetale.wardrobe.util.Gui;
-import com.cavetale.wardrobe.util.Items;
 import com.winthier.playercache.PlayerCache;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -134,16 +135,16 @@ public final class WardrobeCommand implements TabExecutor {
         for (MenuButton menuButton : menuButtonList) {
             if (menuButton.category != null) {
                 gui.setItem(menuButton.category.guiIndex,
-                            Items.text(menuButton.category.createIcon(),
-                                       List.of(menuButton.category.displayName,
-                                               text("Category", DARK_GRAY))),
-                            (p, click) -> {
+                            Items.tooltip(menuButton.category.createIcon(),
+                                          List.of(menuButton.category.displayName,
+                                                  text("Category", DARK_GRAY))),
+                            click -> {
                                 if (click.getClick() != ClickType.LEFT) return;
                                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK,
                                                  SoundCategory.MASTER, 1.0f, 1.0f);
                                 context.selectedCategory = menuButton.category;
                                 context.page = 0;
-                                openGui(p, context);
+                                openGui(player, context);
                             });
                 if (context.selectedCategory == menuButton.category) {
                     builder.tab(menuButton.category.guiIndex, COLOR, BG);
@@ -176,23 +177,23 @@ public final class WardrobeCommand implements TabExecutor {
             final boolean unlocked = context.unlockedItems.contains(wardrobeItem);
             final ItemStack icon;
             if (unlocked) {
-                icon = Items.text(wardrobeItem.toMenuItem(), wardrobeItem.getMenuTooltip());
+                icon = Items.tooltip(wardrobeItem.toMenuItem(), wardrobeItem.getMenuTooltip());
             } else {
-                icon = Items.text(wardrobeItem.toMenuItem(),
-                                  List.of(wardrobeItem.getDisplayName(),
-                                          text("Wardrobe Item", DARK_GRAY),
-                                          textOfChildren(Mytems.CROSSED_CHECKBOX, text(" Locked", RED)),
-                                          empty(),
-                                          text("Purchase this item at ", GRAY),
-                                          textOfChildren(text("at ", GRAY), text("store.cavetale.com", BLUE, UNDERLINED))));
+                icon = Items.tooltip(wardrobeItem.toMenuItem(),
+                                     List.of(wardrobeItem.getDisplayName(),
+                                             text("Wardrobe Item", DARK_GRAY),
+                                             textOfChildren(Mytems.CROSSED_CHECKBOX, text(" Locked", RED)),
+                                             empty(),
+                                             text("Purchase this item at ", GRAY),
+                                             textOfChildren(text("at ", GRAY), text("store.cavetale.com", BLUE, UNDERLINED))));
             }
-            gui.setItem(guiIndex, icon, (p, click) -> {
+            gui.setItem(guiIndex, icon, click -> {
                     if (!click.isLeftClick() && !click.isRightClick()) return;
                     if (unlocked) {
-                        wardrobeItem.onClick(p, click);
-                        openGui(p, context);
+                        wardrobeItem.onClick(player, click);
+                        openGui(player, context);
                     } else {
-                        onClickUnowned(p, wardrobeItem);
+                        onClickUnowned(player, wardrobeItem);
                     }
                 });
             if (wardrobeItem.isWearing(player)) {
@@ -202,22 +203,26 @@ public final class WardrobeCommand implements TabExecutor {
             }
         }
         if (context.page > 0) {
-            gui.setItem(0, Mytems.ARROW_LEFT.createIcon(List.of(text("Page " + context.page, GRAY))), (p, click) -> {
+            gui.setItem(0, Mytems.ARROW_LEFT.createIcon(List.of(text("Page " + context.page, GRAY))), click -> {
                     if (!click.isLeftClick()) return;
                     player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
                     context.page -= 1;
-                    openGui(p, context);
+                    openGui(player, context);
                 });
         }
         if (context.page < pageCount - 1) {
-            gui.setItem(8, Mytems.ARROW_RIGHT.createIcon(List.of(text("Page " + (context.page + 2), GRAY))), (p, click) -> {
+            gui.setItem(8, Mytems.ARROW_RIGHT.createIcon(List.of(text("Page " + (context.page + 2), GRAY))), click -> {
                     if (!click.isLeftClick()) return;
                     player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
                     context.page += 1;
-                    openGui(p, context);
+                    openGui(player, context);
                 });
         }
         gui.title(builder.build());
+        gui.setItem(Gui.OUTSIDE, null, click -> {
+                if (!click.isLeftClick()) return;
+                MenuItemEvent.openMenu(player);
+            });
         gui.open(player);
     }
 
@@ -248,21 +253,21 @@ public final class WardrobeCommand implements TabExecutor {
             .layer(GuiOverlay.TITLE_BAR, BG)
             .title(text("This heart beats for you", WHITE));
         Gui gui = new Gui(plugin).size(size);
-        gui.setItem(4, 1, Mytems.HEART.createIcon(List.of(text("this heart beats for you", color(0xFFA3C3)))), (p, click) -> {
-                p.sendMessage(textOfChildren(newline(),
-                                             Mytems.MOUSE_LEFT,
-                                             text(" store.cavetale.com/category/shine", color(0xFFA3C3)),
-                                             newline())
-                              .clickEvent(openUrl("https://store.cavetale.com/category/valentine"))
-                              .hoverEvent(showText(text("store.cavetale.com/category/valentine", color(0xFFA3C3), UNDERLINED))));
+        gui.setItem(4, 1, Mytems.HEART.createIcon(List.of(text("this heart beats for you", color(0xFFA3C3)))), click -> {
+                player.sendMessage(textOfChildren(newline(),
+                                                  Mytems.MOUSE_LEFT,
+                                                  text(" store.cavetale.com/category/shine", color(0xFFA3C3)),
+                                                  newline())
+                                   .clickEvent(openUrl("https://store.cavetale.com/category/valentine"))
+                                   .hoverEvent(showText(text("store.cavetale.com/category/valentine", color(0xFFA3C3), UNDERLINED))));
             });
-        gui.setItem(4, 3, Mytems.CUPID_WINGS.createIcon(List.of(text("these wings fly for you", color(0xFFA3C3)))), (p, click) -> {
-                p.sendMessage(textOfChildren(newline(),
-                                             Mytems.MOUSE_LEFT,
-                                             text(" store.cavetale.com/category/valentine", color(0xFFA3C3)),
-                                             newline())
-                              .clickEvent(openUrl("https://store.cavetale.com/category/valentine"))
-                              .hoverEvent(showText(text("store.cavetale.com/category/valentine", color(0xFFA3C3), UNDERLINED))));
+        gui.setItem(4, 3, Mytems.CUPID_WINGS.createIcon(List.of(text("these wings fly for you", color(0xFFA3C3)))), click -> {
+                player.sendMessage(textOfChildren(newline(),
+                                                  Mytems.MOUSE_LEFT,
+                                                  text(" store.cavetale.com/category/valentine", color(0xFFA3C3)),
+                                                  newline())
+                                   .clickEvent(openUrl("https://store.cavetale.com/category/valentine"))
+                                   .hoverEvent(showText(text("store.cavetale.com/category/valentine", color(0xFFA3C3), UNDERLINED))));
             });
         gui.title(builder.build());
         gui.open(player);
