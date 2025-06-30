@@ -26,6 +26,7 @@ public final class DragonMountAdapter implements MountAdapter {
                 e.setPersistent(false);
                 Entities.setTransient(e);
                 e.setCollidable(false);
+                e.setSilent(true);
                 if (collidesWithBlock(spawnLocation.getWorld(), e.getBoundingBox())) {
                     e.remove();
                 }

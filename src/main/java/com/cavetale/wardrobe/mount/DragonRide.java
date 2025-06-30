@@ -129,11 +129,6 @@ public final class DragonRide extends Ride {
         State[] states = State.values();
         int newValue = (state.ordinal() + 1) % states.length;
         state = states[newValue];
-        if (state == State.PAUSE) {
-            dragon.setSilent(true);
-        } else {
-            dragon.setSilent(false);
-        }
         player.sendActionBar(state.infoText);
         player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
     }
